@@ -1,0 +1,17 @@
+# Docker volumes et data
+docker-deployment/logstash/data/
+*.log
+
+# Fichiers temporaires
+*.tmp
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.iml

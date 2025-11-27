@@ -1,0 +1,501 @@
+# Elastic Security Detection Rules
+# Mini-SOC Project
+# Format: NDJSON for import into Kibana Security
+
+## Installation Instructions
+## 1. Navigate to: Kibana > Security > Rules > Import rules
+## 2. Upload this file (ensure .ndjson extension)
+## 3. Activate desired rules
+
+# ============================================
+# USE CASE 1: Brute-Force Attack Detection
+# ============================================
+
+{
+  "name": "Multiple Windows Failed Logins - Brute Force",
+  "description": "Detects 5 or more failed Windows login attempts within 2 minutes from the same source",
+  "risk_score": 75,
+  "severity": "high",
+  "type": "threshold",
+  "query": "event.code:4625 and event.provider:Microsoft-Windows-Security-Auditing",
+  "threshold": {
+    "field": ["source.ip"],
+    "value": 5,
+    "cardinality": []
+  },
+  "index": ["winlogbeat-*", "logs-windows.*"],
+  "interval": "2m",
+  "from": "now-3m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0006",
+      "name": "Credential Access",
+      "reference": "https://attack.mitre.org/tactics/TA0006/"
+    },
+    "technique": [{
+      "id": "T1110",
+      "name": "Brute Force",
+      "reference": "https://attack.mitre.org/techniques/T1110/",
+      "subtechnique": [{
+        "id": "T1110.001",
+        "name": "Password Guessing",
+        "reference": "https://attack.mitre.org/techniques/T1110/001/"
+      }]
+    }]
+  }],
+  "enabled": true,
+  "tags": ["brute-force", "authentication", "windows"]
+}
+
+{
+  "name": "Multiple SSH Failed Logins - Brute Force",
+  "description": "Detects 5 or more failed SSH login attempts within 2 minutes",
+  "risk_score": 75,
+  "severity": "high",
+  "type": "threshold",
+  "query": "event.action:(\"ssh_login_failed\" or \"failed\") and system.auth.ssh.event:*",
+  "threshold": {
+    "field": ["source.ip"],
+    "value": 5,
+    "cardinality": []
+  },
+  "index": ["filebeat-*", "logs-system.auth-*"],
+  "interval": "2m",
+  "from": "now-3m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0006",
+      "name": "Credential Access",
+      "reference": "https://attack.mitre.org/tactics/TA0006/"
+    },
+    "technique": [{
+      "id": "T1110",
+      "name": "Brute Force",
+      "reference": "https://attack.mitre.org/techniques/T1110/"
+    }]
+  }],
+  "enabled": true,
+  "tags": ["brute-force", "authentication", "linux", "ssh"]
+}
+
+# ============================================
+# USE CASE 2: Admin Privilege Abuse
+# ============================================
+
+{
+  "name": "Administrator Login Outside Business Hours",
+  "description": "Detects administrator account logins between 6 PM and 6 AM",
+  "risk_score": 50,
+  "severity": "medium",
+  "type": "query",
+  "query": "event.code:4624 and user.name:(Administrator or admin or *adm*) and @timestamp:[18:00 TO 06:00]",
+  "index": ["winlogbeat-*", "logs-windows.*"],
+  "interval": "5m",
+  "from": "now-6m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0004",
+      "name": "Privilege Escalation",
+      "reference": "https://attack.mitre.org/tactics/TA0004/"
+    },
+    "technique": [{
+      "id": "T1078",
+      "name": "Valid Accounts",
+      "reference": "https://attack.mitre.org/techniques/T1078/"
+    }]
+  }],
+  "enabled": true,
+  "tags": ["privilege-abuse", "after-hours", "admin"]
+}
+
+{
+  "name": "Multiple Privilege Escalations",
+  "description": "Detects 3 or more privilege escalation attempts within 5 minutes",
+  "risk_score": 70,
+  "severity": "high",
+  "type": "threshold",
+  "query": "event.code:4673 or (event.action:executed and process.name:sudo)",
+  "threshold": {
+    "field": ["user.name"],
+    "value": 3,
+    "cardinality": []
+  },
+  "index": ["winlogbeat-*", "filebeat-*", "logs-*"],
+  "interval": "5m",
+  "from": "now-6m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0004",
+      "name": "Privilege Escalation",
+      "reference": "https://attack.mitre.org/tactics/TA0004/"
+    },
+    "technique": [{
+      "id": "T1078",
+      "name": "Valid Accounts",
+      "reference": "https://attack.mitre.org/techniques/T1078/"
+    }]
+  }],
+  "enabled": true,
+  "tags": ["privilege-escalation", "suspicious-activity"]
+}
+
+# ============================================
+# USE CASE 3: Web Application Attacks
+# ============================================
+
+{
+  "name": "SQL Injection Attempt Detected",
+  "description": "Detects potential SQL injection patterns in web requests",
+  "risk_score": 80,
+  "severity": "high",
+  "type": "query",
+  "query": "url.original:(*select* or *union* or *insert* or *update* or *delete* or *drop* or *exec* or *script*) and http.response.status_code:(200 or 500)",
+  "index": ["filebeat-*", "logs-apache*", "logs-nginx*"],
+  "interval": "5m",
+  "from": "now-6m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0001",
+      "name": "Initial Access",
+      "reference": "https://attack.mitre.org/tactics/TA0001/"
+    },
+    "technique": [{
+      "id": "T1190",
+      "name": "Exploit Public-Facing Application",
+      "reference": "https://attack.mitre.org/techniques/T1190/"
+    }]
+  }],
+  "enabled": true,
+  "tags": ["web-attack", "sql-injection", "owasp"]
+}
+
+{
+  "name": "Cross-Site Scripting (XSS) Attempt",
+  "description": "Detects potential XSS attack patterns",
+  "risk_score": 70,
+  "severity": "medium",
+  "type": "query",
+  "query": "url.original:(*<script* or *javascript:* or *onerror=* or *onload=*)",
+  "index": ["filebeat-*", "logs-apache*", "logs-nginx*"],
+  "interval": "5m",
+  "from": "now-6m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0001",
+      "name": "Initial Access",
+      "reference": "https://attack.mitre.org/tactics/TA0001/"
+    },
+    "technique": [{
+      "id": "T1190",
+      "name": "Exploit Public-Facing Application",
+      "reference": "https://attack.mitre.org/techniques/T1190/"
+    }]
+  }],
+  "enabled": true,
+  "tags": ["web-attack", "xss", "owasp"]
+}
+
+{
+  "name": "Web Scanning Activity Detected",
+  "description": "Detects 10 or more 404 errors within 1 minute (web scanning)",
+  "risk_score": 50,
+  "severity": "medium",
+  "type": "threshold",
+  "query": "http.response.status_code:404",
+  "threshold": {
+    "field": ["source.ip"],
+    "value": 10,
+    "cardinality": []
+  },
+  "index": ["filebeat-*", "logs-apache*", "logs-nginx*"],
+  "interval": "1m",
+  "from": "now-2m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0043",
+      "name": "Reconnaissance",
+      "reference": "https://attack.mitre.org/tactics/TA0043/"
+    },
+    "technique": [{
+      "id": "T1595",
+      "name": "Active Scanning",
+      "reference": "https://attack.mitre.org/techniques/T1595/"
+    }]
+  }],
+  "enabled": true,
+  "tags": ["web-scan", "reconnaissance"]
+}
+
+# ============================================
+# USE CASE 4: DNS Exfiltration
+# ============================================
+
+{
+  "name": "Unusually Long DNS Query",
+  "description": "Detects DNS queries longer than 60 characters (potential exfiltration)",
+  "risk_score": 70,
+  "severity": "medium",
+  "type": "query",
+  "query": "dns.question.name:/.{60,}/ and event.category:network",
+  "index": ["packetbeat-*", "logs-network*"],
+  "interval": "5m",
+  "from": "now-6m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0010",
+      "name": "Exfiltration",
+      "reference": "https://attack.mitre.org/tactics/TA0010/"
+    },
+    "technique": [{
+      "id": "T1071",
+      "name": "Application Layer Protocol",
+      "reference": "https://attack.mitre.org/techniques/T1071/",
+      "subtechnique": [{
+        "id": "T1071.004",
+        "name": "DNS",
+        "reference": "https://attack.mitre.org/techniques/T1071/004/"
+      }]
+    }]
+  }],
+  "enabled": true,
+  "tags": ["dns", "exfiltration", "data-theft"]
+}
+
+{
+  "name": "High Volume DNS Queries from Single Source",
+  "description": "Detects 50+ DNS queries from single source within 1 minute",
+  "risk_score": 65,
+  "severity": "medium",
+  "type": "threshold",
+  "query": "event.category:network and dns.question.name:*",
+  "threshold": {
+    "field": ["source.ip"],
+    "value": 50,
+    "cardinality": []
+  },
+  "index": ["packetbeat-*", "logs-network*", "filebeat-*"],
+  "interval": "1m",
+  "from": "now-2m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0011",
+      "name": "Command and Control",
+      "reference": "https://attack.mitre.org/tactics/TA0011/"
+    },
+    "technique": [{
+      "id": "T1071",
+      "name": "Application Layer Protocol",
+      "reference": "https://attack.mitre.org/techniques/T1071/"
+    }]
+  }],
+  "enabled": true,
+  "tags": ["dns", "c2", "exfiltration"]
+}
+
+# ============================================
+# USE CASE 5: Persistence Mechanisms
+# ============================================
+
+{
+  "name": "Registry Run Key Modification",
+  "description": "Detects modifications to Windows Registry Run keys (persistence)",
+  "risk_score": 75,
+  "severity": "high",
+  "type": "query",
+  "query": "event.code:13 and registry.path:(*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run* or *\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce*)",
+  "index": ["winlogbeat-*", "logs-windows.sysmon*"],
+  "interval": "5m",
+  "from": "now-6m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0003",
+      "name": "Persistence",
+      "reference": "https://attack.mitre.org/tactics/TA0003/"
+    },
+    "technique": [{
+      "id": "T1547",
+      "name": "Boot or Logon Autostart Execution",
+      "reference": "https://attack.mitre.org/techniques/T1547/",
+      "subtechnique": [{
+        "id": "T1547.001",
+        "name": "Registry Run Keys / Startup Folder",
+        "reference": "https://attack.mitre.org/techniques/T1547/001/"
+      }]
+    }]
+  }],
+  "enabled": true,
+  "tags": ["persistence", "registry", "windows"]
+}
+
+{
+  "name": "Scheduled Task Creation",
+  "description": "Detects creation of scheduled tasks (potential persistence)",
+  "risk_score": 60,
+  "severity": "medium",
+  "type": "query",
+  "query": "event.code:4698 or (process.name:schtasks.exe and process.args:*create*)",
+  "index": ["winlogbeat-*", "logs-windows.*"],
+  "interval": "5m",
+  "from": "now-6m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0003",
+      "name": "Persistence",
+      "reference": "https://attack.mitre.org/tactics/TA0003/"
+    },
+    "technique": [{
+      "id": "T1053",
+      "name": "Scheduled Task/Job",
+      "reference": "https://attack.mitre.org/techniques/T1053/"
+    }]
+  }],
+  "enabled": true,
+  "tags": ["persistence", "scheduled-task", "windows"]
+}
+
+# ============================================
+# USE CASE 6: Lateral Movement
+# ============================================
+
+{
+  "name": "PsExec Remote Execution Detected",
+  "description": "Detects PsExec usage indicating potential lateral movement",
+  "risk_score": 90,
+  "severity": "critical",
+  "type": "query",
+  "query": "process.name:(psexec.exe or paexec.exe) or file.name:PSEXESVC.exe",
+  "index": ["winlogbeat-*", "logs-windows.sysmon*"],
+  "interval": "5m",
+  "from": "now-6m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0008",
+      "name": "Lateral Movement",
+      "reference": "https://attack.mitre.org/tactics/TA0008/"
+    },
+    "technique": [{
+      "id": "T1570",
+      "name": "Lateral Tool Transfer",
+      "reference": "https://attack.mitre.org/techniques/T1570/"
+    }]
+  }],
+  "enabled": true,
+  "tags": ["lateral-movement", "psexec", "critical"]
+}
+
+{
+  "name": "WMI Remote Execution",
+  "description": "Detects WMI remote execution (lateral movement technique)",
+  "risk_score": 75,
+  "severity": "high",
+  "type": "query",
+  "query": "process.name:wmic.exe and process.args:*/node:*",
+  "index": ["winlogbeat-*", "logs-windows.sysmon*"],
+  "interval": "5m",
+  "from": "now-6m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0008",
+      "name": "Lateral Movement",
+      "reference": "https://attack.mitre.org/tactics/TA0008/"
+    },
+    "technique": [{
+      "id": "T1047",
+      "name": "Windows Management Instrumentation",
+      "reference": "https://attack.mitre.org/techniques/T1047/"
+    }]
+  }],
+  "enabled": true,
+  "tags": ["lateral-movement", "wmi"]
+}
+
+# ============================================
+# ADDITIONAL HIGH-VALUE RULES
+# ============================================
+
+{
+  "name": "Mimikatz Credential Dumping Detected",
+  "description": "Detects Mimikatz usage for credential theft - CRITICAL ALERT",
+  "risk_score": 99,
+  "severity": "critical",
+  "type": "query",
+  "query": "process.name:mimikatz.exe or process.args:(*sekurlsa* or *kerberos::golden* or *lsadump*)",
+  "index": ["winlogbeat-*", "logs-windows.sysmon*"],
+  "interval": "1m",
+  "from": "now-2m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0006",
+      "name": "Credential Access",
+      "reference": "https://attack.mitre.org/tactics/TA0006/"
+    },
+    "technique": [{
+      "id": "T1003",
+      "name": "OS Credential Dumping",
+      "reference": "https://attack.mitre.org/techniques/T1003/"
+    }]
+  }],
+  "enabled": true,
+  "tags": ["credential-theft", "mimikatz", "critical"]
+}
+
+{
+  "name": "Suspicious PowerShell Obfuscation",
+  "description": "Detects obfuscated or encoded PowerShell commands",
+  "risk_score": 75,
+  "severity": "high",
+  "type": "query",
+  "query": "process.name:powershell.exe and process.args:(*-encodedcommand* or *-enc* or *-e*) and process.args:/[A-Za-z0-9+\\/=]{50,}/",
+  "index": ["winlogbeat-*", "logs-windows.sysmon*"],
+  "interval": "5m",
+  "from": "now-6m",
+  "to": "now",
+  "threat": [{
+    "framework": "MITRE ATT&CK",
+    "tactic": {
+      "id": "TA0002",
+      "name": "Execution",
+      "reference": "https://attack.mitre.org/tactics/TA0002/"
+    },
+    "technique": [{
+      "id": "T1059",
+      "name": "Command and Scripting Interpreter",
+      "reference": "https://attack.mitre.org/techniques/T1059/",
+      "subtechnique": [{
+        "id": "T1059.001",
+        "name": "PowerShell",
+        "reference": "https://attack.mitre.org/techniques/T1059/001/"
+      }]
+    }]
+  }],
+  "enabled": true,
+  "tags": ["powershell", "obfuscation", "execution"]
+}

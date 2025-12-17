@@ -1,69 +1,69 @@
-# SOC Performance Dashboard - KPI Tracking
+# Tableau de Bord de Performance SOC - Suivi des KPI
 
-## Dashboard Overview
+## Vue d'Ensemble du Tableau de Bord
 
-This document outlines the key performance indicators (KPIs) for monitoring SOC effectiveness and efficiency.
-
----
-
-## Critical KPIs
-
-### 1. Mean Time to Detect (MTTD)
-
-**Definition**: Average time from when an attack begins to when it is detected by the SOC.
-
-**Formula**: 
-```
-MTTD = (Time of Detection - Time of Attack Start)
-```
-
-**Target**: < 15 minutes for critical alerts
-
-**Measurement**:
-- Timestamp of first malicious activity
-- Timestamp of alert generation
-- Calculate difference
-
-**Dashboard Visualization**: Line chart showing MTTD trend over time
+Ce document décrit les indicateurs clés de performance (KPI) pour surveiller l'efficacité et l'efficience du SOC.
 
 ---
 
-### 2. Mean Time to Acknowledge (MTTA)
+## KPI Critiques
 
-**Definition**: Average time from alert generation to analyst acknowledgment.
+### 1. Temps Moyen de Détection (MTTD)
 
-**Formula**:
+**Définition** : Temps moyen entre le début d'une attaque et sa détection par le SOC.
+
+**Formule** : 
 ```
-MTTA = (Time of Acknowledgment - Time of Alert)
+MTTD = (Heure de Détection - Heure de Début de l'Attaque)
 ```
 
-**Target**: < 5 minutes
+**Objectif** : < 15 minutes pour les alertes critiques
 
-**Measurement**:
-- Alert creation timestamp
-- Analyst acknowledgment timestamp
-- Calculate difference
+**Mesure** :
+- Horodatage de la première activité malveillante
+- Horodatage de génération de l'alerte
+- Calculer la différence
 
-**Dashboard Visualization**: Bar chart by alert severity
+**Visualisation Tableau de Bord** : Graphique linéaire montrant la tendance MTTD dans le temps
 
 ---
 
-### 3. Mean Time to Respond (MTTR)
+### 2. Temps Moyen de Prise en Charge (MTTA)
 
-**Definition**: Average time from alert detection to containment action.
+**Définition** : Temps moyen entre la génération de l'alerte et l'accusé de réception par l'analyste.
 
-**Formula**:
+**Formule** :
 ```
-MTTR = (Time of Containment - Time of Detection)
+MTTA = (Heure d'Accusé de Réception - Heure de l'Alerte)
 ```
 
-**Targets**:
-- Critical: < 15 minutes
-- High: < 30 minutes
-- Medium: < 60 minutes
-- Low: < 4 hours
+**Objectif** : < 5 minutes
 
-**Dashboard Visualization**: Stacked bar chart by severity level
+**Mesure** :
+- Horodatage de création de l'alerte
+- Horodatage d'accusé de réception de l'analyste
+- Calculer la différence
+
+**Visualisation Tableau de Bord** : Graphique à barres par sévérité d'alerte
+
+---
+
+### 3. Temps Moyen de Réponse (MTTR)
+
+**Définition** : Temps moyen entre la détection de l'alerte et l'action de confinement.
+
+**Formule** :
+```
+MTTR = (Heure de Confinement - Heure de Détection)
+```
+
+**Objectifs** :
+- Critique : < 15 minutes
+- Élevé : < 30 minutes
+- Moyen : < 60 minutes
+- Faible : < 4 heures
+
+**Visualisation Tableau de Bord** : Graphique à barres empilées par niveau de sévérité
 
 ---
 

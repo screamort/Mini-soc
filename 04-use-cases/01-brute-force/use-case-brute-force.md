@@ -84,7 +84,7 @@ ALORS ALERTE : VIOLATION RÉUSSIE APRÈS FORCE BRUTE (Priorité Critique)
 
 ---
 
-## Detection Rules
+## Règles de Détection
 
 ### Wazuh Rule (Custom)
 
@@ -150,53 +150,53 @@ index=windows EventCode=4624 src_ip=<identified_ip>
 
 ---
 
-## Alert Triage
+## Triage des Alertes
 
-### Initial Questions
-1. ✅ **Is this a known/trusted IP address?**
-   - Internal IP: Possible misconfiguration or legitimate user lockout
-   - External IP: Higher suspicion - proceed with investigation
+### Questions Initiales
+1. ✅ **Est-ce une adresse IP connue/de confiance ?**
+   - IP interne : Possible mauvaise configuration ou verrouillage utilisateur légitime
+   - IP externe : Suspicion élevée - procéder à l'investigation
 
-2. ✅ **What is the target account?**
-   - Administrative account: Higher priority
-   - Service account: Check if automated process
-   - Disabled account: Likely malicious
+2. ✅ **Quel est le compte cible ?**
+   - Compte administrateur : Priorité plus élevée
+   - Compte de service : Vérifier si processus automatisé
+   - Compte désactivé : Probablement malveillant
 
-3. ✅ **Was the attack successful?**
-   - No successful login: Monitor and block
-   - Successful login: **CRITICAL - Immediate response required**
+3. ✅ **L'attaque a-t-elle réussi ?**
+   - Aucune connexion réussie : Surveiller et bloquer
+   - Connexion réussie : **CRITIQUE - Réponse immédiate requise**
 
-4. ✅ **Is this pattern normal for this environment?**
-   - Check historical baselines
-   - User behavior analytics
+4. ✅ **Ce pattern est-il normal pour cet environnement ?**
+   - Vérifier les bases de référence historiques
+   - Analyse comportementale utilisateur
 
-### Decision Tree
+### Arbre de Décision
 
 ```
-Brute-Force Alert Triggered
+Alerte Force Brute Déclenchée
     │
-    ├─ Success? NO ──> Low Priority
+    ├─ Succès ? NON ──> Priorité Basse
     │   │
-    │   ├─ Internal IP? YES ──> User lockout/password reset
-    │   └─ External IP? YES ──> Block IP, monitor
+    │   ├─ IP Interne ? OUI ──> Verrouillage utilisateur/réinit mot de passe
+    │   └─ IP Externe ? OUI ──> Bloquer IP, surveiller
     │
-    └─ Success? YES ──> CRITICAL PRIORITY
+    └─ Succès ? OUI ──> PRIORITÉ CRITIQUE
         │
-        ├─ Immediate Actions:
-        │   1. Disable compromised account
-        │   2. Block source IP
-        │   3. Force password reset
-        │   4. Escalate to IR team
+        ├─ Actions Immédiates :
+        │   1. Désactiver le compte compromis
+        │   2. Bloquer l'IP source
+        │   3. Forcer la réinitialisation du mot de passe
+        │   4. Escalader vers l'équipe IR
         │
-        └─ Investigation:
-            1. Check post-compromise activity
-            2. Identify lateral movement
-            3. Full forensic analysis
+        └─ Investigation :
+            1. Vérifier l'activité post-compromission
+            2. Identifier le mouvement latéral
+            3. Analyse forensique complète
 ```
 
 ---
 
-## Investigation Playbook
+## Playbook d'Investigation
 
 ### Step 1: Validate the Alert (3 minutes)
 

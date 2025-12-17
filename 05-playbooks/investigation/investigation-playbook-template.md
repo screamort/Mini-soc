@@ -1,64 +1,64 @@
-# Investigation Playbook Template
+# Modèle de Playbook d'Investigation
 
-## Playbook Information
+## Informations sur le Playbook
 
-**Playbook ID**: PB-INV-[NUMBER]  
-**Use Case**: [Related Use Case]  
-**MITRE ATT&CK Technique**: [Technique ID and Name]  
-**Severity Level**: [Critical | High | Medium | Low]  
-**Estimated Time**: [Minutes to complete]  
-**Last Updated**: [Date]
-
----
-
-## Objective
-
-Provide step-by-step investigation procedures for SOC analysts to efficiently triage and investigate security alerts.
+**ID du Playbook** : PB-INV-[NUMÉRO]  
+**Cas d'Usage** : [Cas d'Usage Associé]  
+**Technique MITRE ATT&CK** : [ID et Nom de la Technique]  
+**Niveau de Sévérité** : [Critique | Élevé | Moyen | Faible]  
+**Temps Estimé** : [Minutes pour terminer]  
+**Dernière Mise à Jour** : [Date]
 
 ---
 
-## Pre-Investigation Checklist
+## Objectif
 
-Before starting the investigation:
-
-- [ ] Alert has been acknowledged in SIEM
-- [ ] Incident ticket created (if applicable)
-- [ ] Investigation start time documented
-- [ ] Required tools accessible (SIEM, EDR, network tools)
-- [ ] Evidence preservation plan in place
+Fournir des procédures d'investigation étape par étape pour que les analystes SOC puissent trier et investiguer efficacement les alertes de sécurité.
 
 ---
 
-## Investigation Steps
+## Liste de Vérification Pré-Investigation
 
-### Phase 1: Alert Validation (Time: 3-5 minutes)
+Avant de commencer l'investigation :
 
-#### Step 1.1: Verify Alert Legitimacy
-**Objective**: Confirm the alert is not a false positive
+- [ ] L'alerte a été reconnue dans le SIEM
+- [ ] Ticket d'incident créé (si applicable)
+- [ ] Heure de début d'investigation documentée
+- [ ] Outils requis accessibles (SIEM, EDR, outils réseau)
+- [ ] Plan de préservation des preuves en place
 
-**Actions**:
+---
+
+## Étapes d'Investigation
+
+### Phase 1 : Validation de l'Alerte (Temps : 3-5 minutes)
+
+#### Étape 1.1 : Vérifier la Légitimité de l'Alerte
+**Objectif** : Confirmer que l'alerte n'est pas un faux positif
+
+**Actions** :
 ```
-1. Review alert details in SIEM dashboard
-2. Check alert frequency for this rule
-3. Verify data sources are functioning correctly
-4. Confirm timestamps are reasonable
+1. Consulter les détails de l'alerte dans le tableau de bord SIEM
+2. Vérifier la fréquence des alertes pour cette règle
+3. Confirmer que les sources de données fonctionnent correctement
+4. Confirmer que les horodatages sont raisonnables
 ```
 
-**Key Questions**:
-- ✅ Does the alert contain all expected fields?
-- ✅ Is the timestamp within the expected range?
-- ✅ Are the source/destination IPs valid?
+**Questions Clés** :
+- ✅ L'alerte contient-elle tous les champs attendus ?
+- ✅ L'horodatage est-il dans la plage attendue ?
+- ✅ Les IP source/destination sont-elles valides ?
 
-**Evidence to Collect**:
-- Screenshot of original alert
-- Raw log entries triggering the alert
-- Alert rule configuration
+**Preuves à Collecter** :
+- Capture d'écran de l'alerte originale
+- Entrées de logs brutes déclenchant l'alerte
+- Configuration de la règle d'alerte
 
-**Decision Point**:
+**Point de Décision** :
 ```
-IF alert appears invalid or misconfigured
-  THEN: Document findings, close as false positive
-ELSE: Proceed to Step 1.2
+SI l'alerte semble invalide ou mal configurée
+  ALORS : Documenter les constatations, fermer comme faux positif
+SINON : Passer à l'Étape 1.2
 ```
 
 ---

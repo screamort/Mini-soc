@@ -2,189 +2,172 @@
 
 ## 5-Minute Overview
 
-This project helps you build a functional Security Operations Center (SOC) using open-source tools.
+This project provides a fully functional Security Operations Center (SOC) using Docker and Elastic Stack.
 
-**Goal**: Learn real SOC operations without expensive software  
-**Time**: 12 weeks (part-time)  
-**Cost**: Free (using open-source tools)
-
----
-
-## What You'll Build
-
-- ✅ SIEM platform (Wazuh or Elastic)
-- ✅ Log collection from Windows/Linux
-- ✅ 6 attack detection use-cases
-- ✅ Investigation playbooks
-- ✅ Performance dashboards (MTTD, MTTR)
-- ✅ Red-blue team exercise
+**Goal**: Run a complete SOC in under 5 minutes  
+**Time**: 5 minutes to deploy, days to master  
+**Cost**: Free (Docker + Elastic Stack)
 
 ---
 
-## Step-by-Step (First 24 Hours)
+## What You'll Get
 
-### Hour 1: Understand the Project
-1. Read: `README.md` (this gives you the big picture)
-2. Review: `01-documentation/PROJECT_OVERVIEW.md`
-3. Understand: `01-documentation/ARCHITECTURE.md`
+- ✅ Elasticsearch for log storage
+- ✅ Kibana for visualization
+- ✅ Logstash for log processing
+- ✅ 3 pre-configured attack simulations
+- ✅ Test agent container (Ubuntu with SSH)
+- ✅ Network-accessible services
 
-### Hours 2-4: Set Up Lab Environment
-**Option A: Virtual Machines (Recommended)**
-- Install VMware Workstation or VirtualBox
-- Download Ubuntu Server 22.04 ISO
-- Download Windows 10 ISO
-- Create VMs:
-  - SIEM Server: 4 CPU, 8GB RAM, 100GB disk
-  - Windows Test: 2 CPU, 4GB RAM, 60GB disk
-  - Linux Test: 2 CPU, 2GB RAM, 40GB disk
+---
 
-**Option B: Cloud**
-- AWS/Azure/GCP free tier
-- Create instances matching above specs
+## Step-by-Step (5 Minutes)
 
-### Hours 5-8: Install SIEM
-**For Beginners: Choose Wazuh**
+### Step 1: Prerequisites (1 minute)
+- Install Docker Desktop (Windows/Mac) or Docker Engine (Linux)
+- Minimum 8GB RAM available
+- 20GB free disk space
 
-Follow: `01-documentation/INSTALLATION_GUIDE.md`
-
-Quick commands:
+### Step 2: Clone & Deploy (2 minutes)
 ```bash
-# On Ubuntu Server
-curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh
-sudo bash wazuh-install.sh -a
+# Clone repository
+git clone https://github.com/screamort/Mini-soc.git
+cd Mini-soc/docker-deployment
+
+# Start all services
+docker compose -f docker-compose-elastic.yml up -d
 ```
 
-Access dashboard: `https://<server-ip>`  
-Save the admin password shown during installation!
+### Step 3: Wait for Startup (2 minutes)
+Services take ~60 seconds to initialize:
+- Elasticsearch
+- Kibana  
+- Logstash
+- Test Agent
 
-### Hours 9-12: Deploy First Agent
-
-**Windows (Sysmon)**:
-- Follow: `03-agents-deployment/windows/sysmon-deployment.md`
-- Install Sysmon
-- Configure log forwarding
-
-**Linux (Auditd)**:
-- Follow: `03-agents-deployment/linux/auditd-deployment.md`
-- Install auditd
-- Configure rules
-
-### Hours 13-16: Test First Detection
-
-**Brute-Force Use Case**:
-1. Read: `04-use-cases/01-brute-force/use-case-brute-force.md`
-2. Import rules: `02-siem-configs/wazuh/custom-rules.xml`
-3. Test detection:
+### Step 4: Access & Test (1 minute)
+1. **Open Kibana**: http://localhost:5601
+2. **Run first test**:
    ```powershell
-   # Windows: Trigger failed logins
-   1..10 | ForEach-Object { runas /user:fakeuser$_ cmd.exe }
+   # Windows PowerShell
+   .\test-bruteforce.ps1
    ```
-4. Check SIEM for alerts
-
-### Hours 17-24: Document & Practice
-
-1. Create first incident ticket
-2. Follow investigation playbook: `05-playbooks/investigation/`
-3. Practice response: `05-playbooks/response/`
-4. Document in REX template: `08-rex-feedback/REX-Template.md`
+   ```bash
+   # Linux/Mac
+   ./test-bruteforce.ps1
+   ```
+3. **View results** in Kibana > Discover > Search: `Failed password`
 
 ---
 
-## Key Files Reference
+## Services & Access
 
-| Need | File Location |
-|------|---------------|
-| Installation help | `01-documentation/INSTALLATION_GUIDE.md` |
-| Wazuh rules | `02-siem-configs/wazuh/custom-rules.xml` |
-| Elastic rules | `02-siem-configs/elastic-security/detection-rules.ndjson` |
-| Windows agents | `03-agents-deployment/windows/` |
-| Linux agents | `03-agents-deployment/linux/` |
-| Use cases | `04-use-cases/` |
-| Playbooks | `05-playbooks/` |
-| Red-blue exercise | `07-red-blue-exercises/` |
+| Service | URL | Purpose |
+|---------|-----|----------|
+| Kibana | http://localhost:5601 | Dashboards & visualization |
+| Elasticsearch | http://localhost:9200 | Data storage & search |
+| Logstash Syslog | UDP 5140 | Log collection |
+| Logstash Beats | TCP 5044 | Agent connections |
+| Test Agent SSH | Port 2222 | Attack target (root/testpassword) |
+
+## Available Test Scripts
+
+| Script | Attack Type | Events Generated |
+|--------|-------------|------------------|
+| `test-bruteforce.ps1` | SSH brute-force | 10 failed logins |
+| `test-admin-abuse.ps1` | Privilege abuse | 5 sudo commands |
+| `test-web-attacks.ps1` | Web attacks | 6 SQL/XSS attempts |
+| `test-all.ps1` | All attacks | 21 total events |
 
 ---
 
-## Common First-Day Issues
+## Common Issues
 
-### Issue 1: SIEM Won't Install
+### Issue 1: Docker Not Running
 **Solution**: 
-- Check system requirements (4 CPU, 8GB RAM)
-- Ensure fresh Ubuntu install
-- Check firewall rules
+- Start Docker Desktop
+- Wait 30 seconds for Docker to initialize
+- Retry `docker compose up -d`
 
-### Issue 2: Agent Not Connecting
+### Issue 2: Port Already in Use
 **Solution**:
-- Verify SIEM IP address in agent config
-- Check firewall allows port 1514
-- Restart agent service
+- Check if services already running: `docker ps`
+- Stop existing containers: `docker compose down`
+- Kill process using port: `netstat -ano | findstr :5601`
 
-### Issue 3: No Logs Appearing
+### Issue 3: Kibana Not Accessible
 **Solution**:
-- Verify agent is running
-- Check agent configuration file
-- Review SIEM logs for errors
+- Wait 60-90 seconds after `docker compose up`
+- Check container status: `docker compose ps`
+- View logs: `docker compose logs kibana`
 
-### Issue 4: Can't Access Dashboard
+### Issue 4: Network Access from Other Devices
 **Solution**:
-- Verify SIEM service is running
-- Check firewall allows port 443
-- Try from different browser
-- Check credentials
+- Run firewall script (as Admin): `.\configure-firewall.ps1`
+- Use your machine's IP instead of localhost
+- Ensure devices are on same network
 
 ---
 
-## Your First Week Plan
+## Your First Hour
 
-**Day 1**: Lab setup + SIEM installation  
-**Day 2**: Deploy Windows agent (Sysmon)  
-**Day 3**: Deploy Linux agent (Auditd)  
-**Day 4**: Import detection rules  
-**Day 5**: Test brute-force detection  
-**Day 6**: Practice investigation playbook  
-**Day 7**: Document first REX
+**Minute 0-5**: Deploy the stack  
+**Minute 5-10**: Explore Kibana interface  
+**Minute 10-20**: Run attack simulations  
+**Minute 20-40**: Analyze detection results  
+**Minute 40-60**: Create first dashboard
 
 ---
 
-## Critical Commands Reference
+## Critical Commands
 
-### Check SIEM Status (Wazuh)
+### Start/Stop Services
 ```bash
-sudo systemctl status wazuh-manager
-sudo systemctl status wazuh-dashboard
+# Start all services
+docker compose -f docker-compose-elastic.yml up -d
+
+# Stop all services
+docker compose -f docker-compose-elastic.yml down
+
+# View status
+docker compose -f docker-compose-elastic.yml ps
 ```
 
-### View SIEM Logs
+### View Logs
 ```bash
-sudo tail -f /var/ossec/logs/ossec.log
+# All services
+docker compose logs
+
+# Specific service
+docker compose logs kibana
+docker compose logs elasticsearch
+
+# Follow logs
+docker compose logs -f
 ```
 
-### Check Agent Status
+### Access Test Agent
 ```bash
-# Wazuh manager
-sudo /var/ossec/bin/agent_control -l
-```
+# SSH into test agent
+ssh -p 2222 root@localhost
+# Password: testpassword
 
-### Test Detection Rule
-```bash
-# Wazuh
-sudo /var/ossec/bin/ossec-logtest
-# Paste log sample, press Enter twice
+# Execute command in container
+docker exec -it test-agent bash
 ```
 
 ---
 
-## Success Checklist (Week 1)
+## Success Checklist (First Hour)
 
-- [ ] SIEM installed and accessible
-- [ ] Dashboard login working
-- [ ] Windows agent deployed
-- [ ] Linux agent deployed
-- [ ] Logs visible in SIEM
-- [ ] First detection rule tested
-- [ ] Alert generated successfully
-- [ ] Playbook followed
-- [ ] Documentation created
+- [ ] Docker Desktop running
+- [ ] Repository cloned
+- [ ] Services deployed (`docker compose up -d`)
+- [ ] Kibana accessible (http://localhost:5601)
+- [ ] Test script executed
+- [ ] Logs visible in Kibana Discover
+- [ ] Attack events detected
+- [ ] Ready for advanced testing
 
 ---
 

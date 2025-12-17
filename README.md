@@ -1,27 +1,28 @@
 # Mini-SOC Project
 
-A comprehensive Security Operations Center (SOC) training project focused on building operational skills using open-source tools.
+A comprehensive Security Operations Center (SOC) training project using Docker-based Elastic Stack for real-time threat detection and analysis.
 
 ## Project Status
 
-**Phase**: Foundation Complete ✅  
+**Phase**: Operational ✅  
 **Version**: 1.0  
-**Last Updated**: November 27, 2025
+**Stack**: Elastic Stack (Docker)
+**Last Updated**: December 17, 2025
 
 ---
 
 ## Quick Start
 
-### For Beginners
-1. Read: [`01-documentation/PROJECT_OVERVIEW.md`](01-documentation/PROJECT_OVERVIEW.md)
-2. Review: [`01-documentation/ARCHITECTURE.md`](01-documentation/ARCHITECTURE.md)
-3. Follow: [`01-documentation/INSTALLATION_GUIDE.md`](01-documentation/INSTALLATION_GUIDE.md)
+### Launch the SOC
+1. Navigate to: `docker-deployment/`
+2. Run: `docker compose -f docker-compose-elastic.yml up -d`
+3. Access Kibana: http://localhost:5601
+4. Test detection: `.\test-bruteforce.ps1`
 
-### For Implementation
-1. Choose your SIEM: Wazuh (recommended) or Elastic Security
-2. Deploy agents: See `03-agents-deployment/`
-3. Import detection rules: See `02-siem-configs/`
-4. Test with first use-case: `04-use-cases/01-brute-force/`
+### For Development
+1. Review architecture: `01-documentation/ARCHITECTURE.md`
+2. Test use-cases: `04-use-cases/`
+3. Run simulations: `docker-deployment/test-*.ps1`
 
 ---
 
@@ -29,78 +30,68 @@ A comprehensive Security Operations Center (SOC) training project focused on bui
 
 ```
 mini-soc/
-├── 01-documentation/              Project docs & guides
-│   ├── PROJECT_OVERVIEW.md        Project goals & timeline
+├── docker-deployment/             Docker Compose configs
+│   ├── docker-compose-elastic.yml Elastic Stack services
+│   ├── logstash/                  Log processing pipeline
+│   ├── test-bruteforce.ps1        SSH brute-force simulation
+│   ├── test-admin-abuse.ps1       Privilege abuse simulation
+│   ├── test-web-attacks.ps1       Web attack simulation
+│   └── test-all.ps1               Run all tests
+│
+├── 01-documentation/              Project documentation
+│   ├── PROJECT_OVERVIEW.md        Project goals
 │   ├── ARCHITECTURE.md            System architecture
-│   └── INSTALLATION_GUIDE.md      Installation steps
+│   └── INSTALLATION_GUIDE.md      Setup guide
 │
-├── 02-siem-configs/               SIEM configurations
-│   ├── wazuh/                     Wazuh detection rules
-│   └── elastic-security/          Elastic Security rules
+├── 02-siem-configs/               Detection rules
+│   └── wazuh/custom-rules.xml     Custom detection rules
 │
-├── 03-agents-deployment/          Agent deployment guides
-│   ├── windows/                   Windows agents (Sysmon, Winlogbeat)
-│   ├── linux/                     Linux agents (Auditd, Osquery)
-│   └── network/                   Network devices (pfSense)
+├── 04-use-cases/                  Threat scenarios
+│   ├── 01-brute-force/            SSH brute-force
+│   ├── 02-admin-abuse/            Privilege escalation
+│   └── 03-web-attack/             SQL injection/XSS
 │
-├── 04-use-cases/                  Detection use-cases
-│   ├── 01-brute-force/            Brute-force detection
-│   ├── 02-admin-abuse/            Admin privilege abuse
-│   ├── 03-web-attack/             Web application attacks
-│   ├── 04-dns-exfiltration/       DNS exfiltration
-│   ├── 05-persistence/            Persistence mechanisms
-│   └── 06-lateral-movement/       Lateral movement
-│
-├── 05-playbooks/                  SOC playbooks
+├── 05-playbooks/                  Investigation guides
 │   ├── investigation/             Investigation procedures
-│   └── response/                  Incident response playbooks
+│   └── response/                  Response playbooks
 │
-├── 06-dashboards/                 SOC dashboards
-│   └── SOC-KPI-Dashboard.md       KPI tracking (MTTD, MTTR)
-│
-├── 07-red-blue-exercises/         Red-blue team scenarios
-│   └── Red-Blue-Exercise-Scenario-01.md
-│
-└── 08-rex-feedback/               Feedback & lessons learned
-    └── REX-Template.md            After-action review template
+└── 06-dashboards/                 SOC metrics
+    └── SOC-KPI-Dashboard.md       KPI tracking
 ```
 
 ---
 
 ## Core Components
 
-### SIEM Platform Options
+### Technology Stack
 
-**Wazuh** (Recommended for beginners)
-- All-in-one security platform
-- Pre-configured rules
-- Built-in compliance monitoring
-- Free and open-source
+**Elastic Stack** (Docker-based)
+- **Elasticsearch 8.11.0** - Data storage and search engine
+- **Kibana 8.11.0** - Visualization and dashboards
+- **Logstash 8.11.0** - Log processing and enrichment
+- **Ubuntu 22.04** - Test agent container with SSH
 
-**Elastic Security**
-- Industry-standard ELK stack
-- Powerful query language (KQL)
-- Advanced ML capabilities
-- Flexible and scalable
+**Features**
+- No authentication (lab environment)
+- Network accessible (configurable)
+- Pre-configured log pipelines
+- Automated attack simulations
 
-### Detection Use-Cases (6 Required)
+### Detection Use-Cases (Implemented)
 
-| # | Use Case | MITRE Technique | Priority |
-|---|----------|-----------------|----------|
-| 1 | Brute-Force Attack | T1110.001 | High |
-| 2 | Admin Privilege Abuse | T1078.003 | High |
-| 3 | Web Application Attack | T1190 | Medium |
-| 4 | DNS Exfiltration | T1071.004 | Medium |
-| 5 | Persistence Mechanisms | T1547 | High |
-| 6 | Lateral Movement | T1021 | High |
+| # | Use Case | MITRE Technique | Status |
+|---|----------|-----------------|--------|
+| 1 | Brute-Force Attack | T1110.001 | ✅ Operational |
+| 2 | Admin Privilege Abuse | T1078.003 | ✅ Operational |
+| 3 | Web Application Attack | T1190 | ✅ Operational |
 
-### Key Agents
+### Services & Ports
 
-- **Sysmon**: Windows system monitoring
-- **Winlogbeat**: Windows log forwarding
-- **Auditd**: Linux auditing
-- **Osquery**: Endpoint visibility
-- **pfSense**: Network/firewall logs
+- **Kibana Dashboard**: http://localhost:5601
+- **Elasticsearch API**: http://localhost:9200
+- **Logstash Syslog (UDP)**: Port 5140
+- **Logstash Beats (TCP)**: Port 5044  
+- **Test Agent SSH**: Port 2222 (root/testpassword)
 
 ---
 
@@ -130,57 +121,41 @@ mini-soc/
 
 ### Prerequisites
 
-**Knowledge**:
-- Basic networking (TCP/IP, DNS)
-- Windows/Linux administration
-- Command line proficiency
-
-**Hardware** (Virtual Lab):
-- SIEM Server: 4 vCPU, 8GB RAM, 100GB disk
-- Test Windows: 2 vCPU, 4GB RAM
-- Test Linux: 2 vCPU, 2GB RAM
-
 **Software**:
-- VMware/VirtualBox/Hyper-V
-- Ubuntu Server 22.04 (for SIEM)
-- Windows 10/11 (for testing)
-- Linux (Ubuntu/Debian for testing)
+- Docker Desktop (Windows/Mac) or Docker Engine (Linux)
+- 8GB RAM minimum
+- 20GB free disk space
 
-### Installation Path
+**Knowledge** (Optional):
+- Basic Docker concepts
+- Basic networking (TCP/IP)
+- Command line basics
 
-1. **Week 1-2**: Set up SIEM platform
-   - Follow `01-documentation/INSTALLATION_GUIDE.md`
-   - Choose Wazuh or Elastic Security
-   - Verify dashboard access
+### Quick Installation
 
-2. **Week 3**: Deploy first agents
-   - Windows: Sysmon + Winlogbeat
-   - Linux: Auditd
-   - Verify log ingestion
+1. **Clone repository**
+   ```bash
+   git clone https://github.com/screamort/Mini-soc.git
+   cd Mini-soc/docker-deployment
+   ```
 
-3. **Week 4**: Implement first use-case
-   - Start with brute-force detection
-   - Import detection rules
-   - Test with simulation
+2. **Start services**
+   ```bash
+   docker compose -f docker-compose-elastic.yml up -d
+   ```
 
-4. **Week 5-8**: Complete remaining use-cases
-   - One use-case per week
-   - Test each thoroughly
-   - Document findings
+3. **Wait 60 seconds**, then access:
+   - Kibana: http://localhost:5601
+   - Elasticsearch: http://localhost:9200
 
-5. **Week 9**: Create dashboards
-   - Implement KPI tracking
-   - MTTD/MTTR monitoring
+4. **Test detection**
+   ```powershell
+   .\test-bruteforce.ps1
+   ```
 
-6. **Week 10-11**: Red-blue exercise
-   - Execute attack scenario
-   - Test detection/response
-   - Document REX
-
-7. **Week 12**: Final documentation
-   - Complete all playbooks
-   - Lessons learned
-   - Future roadmap
+5. **View alerts in Kibana**
+   - Go to Discover
+   - Search: `Failed password`
 
 ---
 
@@ -256,33 +231,25 @@ This is a personal learning project, but feedback and suggestions are welcome:
 
 ## Roadmap
 
-### Phase 1: Foundation (Current) ✅
-- [x] Project structure created
-- [x] Core documentation written
-- [x] SIEM configs prepared
-- [x] Agent deployment guides created
-- [x] 6 use-case templates ready
-- [x] Playbooks documented
-- [x] Dashboard framework defined
-- [x] Red-blue exercise designed
+### Phase 1: Foundation ✅
+- [x] Docker Compose configuration
+- [x] Elastic Stack integration
+- [x] Test agent container
+- [x] Attack simulation scripts
+- [x] Network accessibility
 
-### Phase 2: Implementation (Next)
-- [ ] SIEM deployed
-- [ ] Agents installed
-- [ ] Detection rules active
-- [ ] First use-case tested
+### Phase 2: Detection ✅
+- [x] Brute-force detection
+- [x] Admin abuse detection  
+- [x] Web attack detection
+- [x] Log pipeline configured
+- [x] Kibana dashboards accessible
 
-### Phase 3: Validation
-- [ ] All 6 use-cases operational
-- [ ] Playbooks tested
-- [ ] Metrics tracked
-- [ ] Red-blue exercise executed
-
-### Phase 4: Optimization
-- [ ] False positives tuned
-- [ ] Response times optimized
-- [ ] Documentation refined
-- [ ] REX completed
+### Phase 3: Future Enhancements
+- [ ] Additional use-cases (DNS exfiltration, persistence)
+- [ ] Automated alerting
+- [ ] Response playbook automation
+- [ ] Performance optimization
 
 ---
 
@@ -328,11 +295,11 @@ Open-source tools used retain their respective licenses.
 
 ## Next Steps
 
-1. ✅ Review project structure
-2. ➡️ Choose SIEM platform (Wazuh recommended)
-3. ⏳ Set up lab environment
-4. ⏳ Begin installation
-5. ⏳ Deploy first agent
-6. ⏳ Test first use-case
+1. ✅ Clone and deploy
+2. ✅ Access Kibana dashboard
+3. ✅ Run attack simulations
+4. ➡️ Create custom detection rules
+5. ⏳ Build SOC dashboards
+6. ⏳ Implement alerting
 
-**Ready to begin? Start with:** `01-documentation/INSTALLATION_GUIDE.md`
+**Ready to test? Run:** `docker compose -f docker-compose-elastic.yml up -d`

@@ -1,87 +1,87 @@
-# Mini-SOC Project
+# Projet Mini-SOC
 
-A comprehensive Security Operations Center (SOC) training project using Docker-based Elastic Stack for real-time threat detection and analysis.
+Un projet de formation complet au Centre d'Opérations de Sécurité (SOC) utilisant Elastic Stack sur Docker pour la détection et l'analyse des menaces en temps réel.
 
-## Project Status
+## Statut du Projet
 
-**Phase**: Operational ✅  
+**Phase**: Opérationnel ✅  
 **Version**: 1.0  
 **Stack**: Elastic Stack (Docker)
-**Last Updated**: December 17, 2025
+**Dernière mise à jour**: 17 décembre 2025
 
 ---
 
-## Quick Start
+## Démarrage Rapide
 
-### Launch the SOC
-1. Navigate to: `docker-deployment/`
-2. Run: `docker compose -f docker-compose-elastic.yml up -d`
-3. Access Kibana: http://localhost:5601
-4. Test detection: `.\test-bruteforce.ps1`
+### Lancer le SOC
+1. Naviguez vers: `docker-deployment/`
+2. Exécutez: `docker compose -f docker-compose-elastic.yml up -d`
+3. Accédez à Kibana: http://localhost:5601
+4. Testez la détection: `.\test-bruteforce.ps1`
 
-### For Development
-1. Review architecture: `01-documentation/ARCHITECTURE.md`
-2. Test use-cases: `04-use-cases/`
-3. Run simulations: `docker-deployment/test-*.ps1`
+### Pour le Développement
+1. Consultez l'architecture: `01-documentation/ARCHITECTURE.md`
+2. Testez les cas d'usage: `04-use-cases/`
+3. Lancez les simulations: `docker-deployment/test-*.ps1`
 
 ---
 
-## Project Structure
+## Structure du Projet
 
 ```
 mini-soc/
-├── docker-deployment/             Docker Compose configs
-│   ├── docker-compose-elastic.yml Elastic Stack services
-│   ├── logstash/                  Log processing pipeline
-│   ├── configure-firewall.ps1     Windows firewall setup
-│   ├── test-bruteforce.ps1        SSH brute-force simulation
-│   ├── test-admin-abuse.ps1       Privilege abuse simulation
-│   ├── test-web-attacks.ps1       Web attack simulation
-│   └── test-all.ps1               Run all tests
+├── docker-deployment/             Configurations Docker Compose
+│   ├── docker-compose-elastic.yml Services Elastic Stack
+│   ├── logstash/                  Pipeline de traitement des logs
+│   ├── configure-firewall.ps1     Configuration pare-feu Windows
+│   ├── test-bruteforce.ps1        Simulation brute-force SSH
+│   ├── test-admin-abuse.ps1       Simulation abus de privilèges
+│   ├── test-web-attacks.ps1       Simulation attaques web
+│   └── test-all.ps1               Exécute tous les tests
 │
-├── 01-documentation/              Project documentation
-│   ├── PROJECT_OVERVIEW.md        Project goals
-│   ├── ARCHITECTURE.md            System architecture
-│   └── INSTALLATION_GUIDE.md      Setup guide
+├── 01-documentation/              Documentation du projet
+│   ├── PROJECT_OVERVIEW.md        Objectifs du projet
+│   ├── ARCHITECTURE.md            Architecture système
+│   └── INSTALLATION_GUIDE.md      Guide d'installation
 │
-├── 04-use-cases/                  Threat scenarios
-│   ├── 01-brute-force/            SSH brute-force
-│   ├── 02-admin-abuse/            Privilege escalation
-│   └── 03-web-attack/             SQL injection/XSS
+├── 04-use-cases/                  Scénarios de menaces
+│   ├── 01-brute-force/            Brute-force SSH
+│   ├── 02-admin-abuse/            Escalade de privilèges
+│   └── 03-web-attack/             Injection SQL/XSS
 │
-├── 05-playbooks/                  Investigation guides
-│   ├── investigation/             Investigation procedures
-│   └── response/                  Response playbooks
+├── 05-playbooks/                  Guides d'investigation
+│   ├── investigation/             Procédures d'investigation
+│   └── response/                  Playbooks de réponse
 │
-└── 06-dashboards/                 SOC metrics
-    └── SOC-KPI-Dashboard.md       KPI tracking
+└── 06-dashboards/                 Métriques SOC
+    └── SOC-KPI-Dashboard.md       Suivi des KPI
 ```
 
 ---
 
-## Core Components
+## Composants Principaux
 
-### Technology Stack
+### Stack Technologique
 
-**Elastic Stack** (Docker-based)
-- **Elasticsearch 8.11.0** - Data storage and search engine
-- **Kibana 8.11.0** - Visualization and dashboards
-- **Logstash 8.11.0** - Log processing and enrichment
-- **Ubuntu 22.04** - Test agent container with SSH
+**Elastic Stack** (Basé sur Docker)
+- **Elasticsearch 8.11.0** - Stockage et moteur de recherche
+- **Kibana 8.11.0** - Visualisation et tableaux de bord
+- **Logstash 8.11.0** - Traitement et enrichissement des logs
+- **Ubuntu 22.04** - Conteneur agent de test avec SSH
 
-**Features**
-- No authentication (lab environment)
-- Network accessible (configurable)
-- Pre-configured log pipelines
-- Automated attack simulations
+**Fonctionnalités**
+- Pas d'authentification (environnement de lab)
+- Accessible sur le réseau (configurable)
+- Pipelines de logs pré-configurés
+- Simulations d'attaques automatisées
 
-### Detection Use-Cases (Implemented)
+### Cas d'Usage de Détection (Implémentés)
 
-| # | Use Case | MITRE Technique | Status |
-|---|----------|-----------------|--------|
-| 1 | Brute-Force Attack | T1110.001 | ✅ Operational |
-| 2 | Admin Privilege Abuse | T1078.003 | ✅ Operational |
-| 3 | Web Application Attack | T1190 | ✅ Operational |
+| # | Cas d'Usage | Technique MITRE | Statut |
+|---|-------------|-----------------|--------|
+| 1 | Attaque Brute-Force | T1110.001 | ✅ Opérationnel |
+| 2 | Abus de Privilèges Admin | T1078.003 | ✅ Opérationnel |
+| 3 | Attaque Application Web | T1190 | ✅ Opérationnel |
 
 ### Services & Ports
 
@@ -89,7 +89,7 @@ mini-soc/
 - **Elasticsearch API**: http://localhost:9200
 - **Logstash Syslog (UDP)**: Port 5140
 - **Logstash Beats (TCP)**: Port 5044  
-- **Test Agent SSH**: Port 2222 (root/testpassword)
+- **Agent de Test SSH**: Port 2222 (root/testpassword)
 
 ---
 

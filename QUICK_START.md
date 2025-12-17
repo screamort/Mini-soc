@@ -1,53 +1,53 @@
-# Quick Start Guide - Mini-SOC
+# Guide de Démarrage Rapide - Mini-SOC
 
-## 5-Minute Overview
+## Aperçu en 5 Minutes
 
-This project provides a fully functional Security Operations Center (SOC) using Docker and Elastic Stack.
+Ce projet fournit un Centre d'Opérations de Sécurité (SOC) pleinement fonctionnel utilisant Docker et Elastic Stack.
 
-**Goal**: Run a complete SOC in under 5 minutes  
-**Time**: 5 minutes to deploy, days to master  
-**Cost**: Free (Docker + Elastic Stack)
-
----
-
-## What You'll Get
-
-- ✅ Elasticsearch for log storage
-- ✅ Kibana for visualization
-- ✅ Logstash for log processing
-- ✅ 3 pre-configured attack simulations
-- ✅ Test agent container (Ubuntu with SSH)
-- ✅ Network-accessible services
+**Objectif**: Exécuter un SOC complet en moins de 5 minutes  
+**Temps**: 5 minutes pour déployer, des jours pour maîtriser  
+**Coût**: Gratuit (Docker + Elastic Stack)
 
 ---
 
-## Step-by-Step (5 Minutes)
+## Ce Que Vous Obtiendrez
 
-### Step 1: Prerequisites (1 minute)
-- Install Docker Desktop (Windows/Mac) or Docker Engine (Linux)
-- Minimum 8GB RAM available
-- 20GB free disk space
+- ✅ Elasticsearch pour le stockage des logs
+- ✅ Kibana pour la visualisation
+- ✅ Logstash pour le traitement des logs
+- ✅ 3 simulations d'attaques pré-configurées
+- ✅ Conteneur agent de test (Ubuntu avec SSH)
+- ✅ Services accessibles sur le réseau
 
-### Step 2: Clone & Deploy (2 minutes)
+---
+
+## Étape par Étape (5 Minutes)
+
+### Étape 1: Prérequis (1 minute)
+- Installer Docker Desktop (Windows/Mac) ou Docker Engine (Linux)
+- Minimum 8GB RAM disponible
+- 20GB d'espace disque libre
+
+### Étape 2: Cloner & Déployer (2 minutes)
 ```bash
-# Clone repository
+# Cloner le dépôt
 git clone https://github.com/screamort/Mini-soc.git
 cd Mini-soc/docker-deployment
 
-# Start all services
+# Démarrer tous les services
 docker compose -f docker-compose-elastic.yml up -d
 ```
 
-### Step 3: Wait for Startup (2 minutes)
-Services take ~60 seconds to initialize:
+### Étape 3: Attendre le Démarrage (2 minutes)
+Les services prennent ~60 secondes à s'initialiser:
 - Elasticsearch
 - Kibana  
 - Logstash
-- Test Agent
+- Agent de Test
 
-### Step 4: Access & Test (1 minute)
-1. **Open Kibana**: http://localhost:5601
-2. **Run first test**:
+### Étape 4: Accéder & Tester (1 minute)
+1. **Ouvrir Kibana**: http://localhost:5601
+2. **Lancer le premier test**:
    ```powershell
    # Windows PowerShell
    .\test-bruteforce.ps1
@@ -56,164 +56,164 @@ Services take ~60 seconds to initialize:
    # Linux/Mac
    ./test-bruteforce.ps1
    ```
-3. **View results** in Kibana > Discover > Search: `Failed password`
+3. **Voir les résultats** dans Kibana > Discover > Rechercher: `Failed password`
 
 ---
 
-## Services & Access
+## Services & Accès
 
-| Service | URL | Purpose |
+| Service | URL | Objectif |
 |---------|-----|----------|
-| Kibana | http://localhost:5601 | Dashboards & visualization |
-| Elasticsearch | http://localhost:9200 | Data storage & search |
-| Logstash Syslog | UDP 5140 | Log collection |
-| Logstash Beats | TCP 5044 | Agent connections |
-| Test Agent SSH | Port 2222 | Attack target (root/testpassword) |
+| Kibana | http://localhost:5601 | Tableaux de bord & visualisation |
+| Elasticsearch | http://localhost:9200 | Stockage & recherche de données |
+| Logstash Syslog | UDP 5140 | Collecte de logs |
+| Logstash Beats | TCP 5044 | Connexions agents |
+| Agent de Test SSH | Port 2222 | Cible d'attaque (root/testpassword) |
 
-## Available Test Scripts
+## Scripts de Test Disponibles
 
-| Script | Attack Type | Events Generated |
-|--------|-------------|------------------|
-| `test-bruteforce.ps1` | SSH brute-force | 10 failed logins |
-| `test-admin-abuse.ps1` | Privilege abuse | 5 sudo commands |
-| `test-web-attacks.ps1` | Web attacks | 6 SQL/XSS attempts |
-| `test-all.ps1` | All attacks | 21 total events |
+| Script | Type d'Attaque | Événements Générés |
+|--------|----------------|----------------------|
+| `test-bruteforce.ps1` | Brute-force SSH | 10 échecs de connexion |
+| `test-admin-abuse.ps1` | Abus de privilèges | 5 commandes sudo |
+| `test-web-attacks.ps1` | Attaques web | 6 tentatives SQL/XSS |
+| `test-all.ps1` | Toutes les attaques | 21 événements totaux |
 
 ---
 
-## Common Issues
+## Problèmes Courants
 
-### Issue 1: Docker Not Running
+### Problème 1: Docker Ne Fonctionne Pas
 **Solution**: 
-- Start Docker Desktop
-- Wait 30 seconds for Docker to initialize
-- Retry `docker compose up -d`
+- Démarrer Docker Desktop
+- Attendre 30 secondes que Docker s'initialise
+- Réessayer `docker compose up -d`
 
-### Issue 2: Port Already in Use
+### Problème 2: Port Déjà Utilisé
 **Solution**:
-- Check if services already running: `docker ps`
-- Stop existing containers: `docker compose down`
-- Kill process using port: `netstat -ano | findstr :5601`
+- Vérifier si les services sont déjà en cours: `docker ps`
+- Arrêter les conteneurs existants: `docker compose down`
+- Tuer le processus utilisant le port: `netstat -ano | findstr :5601`
 
-### Issue 3: Kibana Not Accessible
+### Problème 3: Kibana Non Accessible
 **Solution**:
-- Wait 60-90 seconds after `docker compose up`
-- Check container status: `docker compose ps`
-- View logs: `docker compose logs kibana`
+- Attendre 60-90 secondes après `docker compose up`
+- Vérifier le statut des conteneurs: `docker compose ps`
+- Voir les logs: `docker compose logs kibana`
 
-### Issue 4: Network Access from Other Devices
+### Problème 4: Accès Réseau depuis D'autres Appareils
 **Solution**:
-- Run firewall script (as Admin): `.\configure-firewall.ps1`
-- Use your machine's IP instead of localhost
-- Ensure devices are on same network
+- Exécuter le script pare-feu (en Admin): `.\configure-firewall.ps1`
+- Utiliser l'IP de votre machine au lieu de localhost
+- S'assurer que les appareils sont sur le même réseau
 
 ---
 
-## Your First Hour
+## Votre Première Heure
 
-**Minute 0-5**: Deploy the stack  
-**Minute 5-10**: Explore Kibana interface  
-**Minute 10-20**: Run attack simulations  
-**Minute 20-40**: Analyze detection results  
-**Minute 40-60**: Create first dashboard
+**Minute 0-5**: Déployer la stack  
+**Minute 5-10**: Explorer l'interface Kibana  
+**Minute 10-20**: Lancer les simulations d'attaques  
+**Minute 20-40**: Analyser les résultats de détection  
+**Minute 40-60**: Créer le premier dashboard
 
 ---
 
-## Critical Commands
+## Commandes Critiques
 
-### Start/Stop Services
+### Démarrer/Arrêter les Services
 ```bash
-# Start all services
+# Démarrer tous les services
 docker compose -f docker-compose-elastic.yml up -d
 
-# Stop all services
+# Arrêter tous les services
 docker compose -f docker-compose-elastic.yml down
 
-# View status
+# Voir le statut
 docker compose -f docker-compose-elastic.yml ps
 ```
 
-### View Logs
+### Voir les Logs
 ```bash
-# All services
+# Tous les services
 docker compose logs
 
-# Specific service
+# Service spécifique
 docker compose logs kibana
 docker compose logs elasticsearch
 
-# Follow logs
+# Suivre les logs
 docker compose logs -f
 ```
 
-### Access Test Agent
+### Accéder à l'Agent de Test
 ```bash
-# SSH into test agent
+# SSH dans l'agent de test
 ssh -p 2222 root@localhost
-# Password: testpassword
+# Mot de passe: testpassword
 
-# Execute command in container
+# Exécuter une commande dans le conteneur
 docker exec -it test-agent bash
 ```
 
 ---
 
-## Success Checklist (First Hour)
+## Liste de Contrôle de Succès (Première Heure)
 
-- [ ] Docker Desktop running
-- [ ] Repository cloned
-- [ ] Services deployed (`docker compose up -d`)
+- [ ] Docker Desktop en cours d'exécution
+- [ ] Dépôt cloné
+- [ ] Services déployés (`docker compose up -d`)
 - [ ] Kibana accessible (http://localhost:5601)
-- [ ] Test script executed
-- [ ] Logs visible in Kibana Discover
-- [ ] Attack events detected
-- [ ] Ready for advanced testing
+- [ ] Script de test exécuté
+- [ ] Logs visibles dans Kibana Discover
+- [ ] Événements d'attaque détectés
+- [ ] Prêt pour les tests avancés
 
 ---
 
-## Need Help?
+## Besoin d'Aide ?
 
-1. **Check documentation**: `01-documentation/` folder
-2. **Review use-case**: Detailed steps in `04-use-cases/`
-3. **Follow playbook**: Step-by-step in `05-playbooks/`
-4. **Community resources**: 
-   - Wazuh documentation
-   - Elastic documentation
-   - Security forums
-
----
-
-## Next Steps After Week 1
-
-1. ✅ Week 1 complete - Basic setup done
-2. ➡️ Week 2 - Complete use-case #2 (Admin abuse)
-3. ⏳ Week 3 - Complete use-case #3 (Web attacks)
-4. ⏳ Week 4 - Complete use-case #4 (DNS exfiltration)
-5. ⏳ Week 5 - Complete use-case #5 (Persistence)
-6. ⏳ Week 6 - Complete use-case #6 (Lateral movement)
-7. ⏳ Week 7-8 - Tune rules, reduce false positives
-8. ⏳ Week 9 - Implement KPI dashboard
-9. ⏳ Week 10-11 - Red-blue exercise
-10. ⏳ Week 12 - Final documentation and REX
+1. **Consulter la documentation**: dossier `01-documentation/`
+2. **Revoir le cas d'usage**: Étapes détaillées dans `04-use-cases/`
+3. **Suivre le playbook**: Étape par étape dans `05-playbooks/`
+4. **Ressources communautaires**: 
+   - Documentation Wazuh
+   - Documentation Elastic
+   - Forums de sécurité
 
 ---
 
-## Quick Tips
+## Prochaines Étapes Après la Semaine 1
 
-✅ **Start simple**: Begin with Wazuh, it's easier for beginners  
-✅ **One step at a time**: Don't rush, validate each component  
-✅ **Document everything**: Use the REX template from day 1  
-✅ **Test frequently**: Break and fix to learn better  
-✅ **Ask questions**: Communities are helpful  
-
-❌ **Don't skip validation**: Always verify before moving on  
-❌ **Don't run in production**: Use isolated test environment  
-❌ **Don't ignore errors**: Fix issues before proceeding  
+1. ✅ Semaine 1 terminée - Configuration de base effectuée
+2. ➡️ Semaine 2 - Compléter le cas d'usage #2 (Abus admin)
+3. ⏳ Semaine 3 - Compléter le cas d'usage #3 (Attaques web)
+4. ⏳ Semaine 4 - Compléter le cas d'usage #4 (Exfiltration DNS)
+5. ⏳ Semaine 5 - Compléter le cas d'usage #5 (Persistence)
+6. ⏳ Semaine 6 - Compléter le cas d'usage #6 (Mouvement latéral)
+7. ⏳ Semaine 7-8 - Ajuster les règles, réduire les faux positifs
+8. ⏳ Semaine 9 - Implémenter le dashboard KPI
+9. ⏳ Semaine 10-11 - Exercice red-blue
+10. ⏳ Semaine 12 - Documentation finale et REX
 
 ---
 
-**Ready to start? Begin here**: `01-documentation/INSTALLATION_GUIDE.md`
+## Conseils Rapides
 
-**Questions?** Review the documentation in `01-documentation/`
+✅ **Commencer simple**: Débutez avec Wazuh, c'est plus facile pour les débutants  
+✅ **Une étape à la fois**: Ne vous précipitez pas, validez chaque composant  
+✅ **Tout documenter**: Utilisez le modèle REX dès le premier jour  
+✅ **Tester fréquemment**: Casser et réparer pour mieux apprendre  
+✅ **Poser des questions**: Les communautés sont utiles  
 
-**Good luck! 🚀**
+❌ **Ne pas sauter la validation**: Toujours vérifier avant de continuer  
+❌ **Ne pas exécuter en production**: Utiliser un environnement de test isolé  
+❌ **Ne pas ignorer les erreurs**: Corriger les problèmes avant de procéder  
+
+---
+
+**Prêt à commencer ? Débutez ici**: `01-documentation/INSTALLATION_GUIDE.md`
+
+**Des questions ?** Consultez la documentation dans `01-documentation/`
+
+**Bonne chance ! 🚀**

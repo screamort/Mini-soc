@@ -1,77 +1,77 @@
-# Mini-SOC Project - Overview
+# Projet Mini-SOC - Vue d'Ensemble
 
-## 1. Project Origin
+## 1. Origine du Projet
 
-This project was created to acquire operational SOC skills without relying on expensive software solutions. The goal is to structure comprehensive learning around the four pillars of SOC operations:
+Ce projet a été créé pour acquérir des compétences opérationnelles SOC sans dépendre de solutions logicielles coûteuses. L'objectif est de structurer un apprentissage complet autour des quatre piliers des opérations SOC :
 
-1. **Collection** - Log and event aggregation
-2. **Correlation** - Event analysis and pattern matching
-3. **Detection** - Threat identification through rules and analytics
-4. **Response** - Incident handling and remediation
+1. **Collecte** - Agrégation des logs et événements
+2. **Corrélation** - Analyse d'événements et détection de motifs
+3. **Détection** - Identification des menaces via règles et analyses
+4. **Réponse** - Gestion et remédiation des incidents
 
-This project also serves as preparation for the **Security+ certification** with professional-grade documentation and hands-on experience.
-
----
-
-## 2. Main Objective
-
-Build a functional mini-SOC environment including:
-
-### Core Components
-- **SIEM Platform**: Open-source solution (Wazuh or Elastic Security)
-- **Log Collection Agents**:
-  - Winlogbeat (Windows event logs)
-  - Sysmon (Windows system monitoring)
-  - Auditd (Linux auditing)
-  - Osquery (endpoint visibility)
-  - pfSense (network/firewall logs)
-
-### Detection Use-Cases (≥6 Required)
-1. Brute-force attacks
-2. Administrator privilege abuse
-3. Web application attacks
-4. DNS exfiltration
-5. Persistence mechanisms
-6. Lateral movement
-
-### Operational Elements
-- Clear response playbooks for each use-case
-- SOC performance dashboard with key KPIs:
-  - **MTTD** (Mean Time To Detect)
-  - **MTTR** (Mean Time To Respond)
+Ce projet sert également de préparation à la **certification Security+** avec une documentation de niveau professionnel et une expérience pratique.
 
 ---
 
-## 3. Qualitative Objectives (End of Year)
+## 2. Objectif Principal
 
-- [ ] Precise detection rules with low false-positive rates
-- [ ] Simple, actionable investigation playbooks
-- [ ] SOC performance dashboard (KPIs + runbooks)
-- [ ] Clear documentation covering:
-  - Installation procedures
-  - Operational workflows
-  - Agent onboarding guides
-- [ ] Structured feedback report (REX) from red-blue team exercise
+Construire un environnement mini-SOC fonctionnel comprenant :
+
+### Composants Principaux
+- **Plateforme SIEM**: Solution open-source (Wazuh ou Elastic Security)
+- **Agents de Collecte de Logs**:
+  - Winlogbeat (logs d'événements Windows)
+  - Sysmon (surveillance système Windows)
+  - Auditd (audit Linux)
+  - Osquery (visibilité des endpoints)
+  - pfSense (logs réseau/pare-feu)
+
+### Cas d'Usage de Détection (≪6 Requis)
+1. Attaques par force brute
+2. Abus de privilèges administrateur
+3. Attaques d'applications web
+4. Exfiltration DNS
+5. Mécanismes de persistence
+6. Mouvement latéral
+
+### Éléments Opérationnels
+- Playbooks de réponse clairs pour chaque cas d'usage
+- Tableau de bord de performance SOC avec KPIs clés :
+  - **MTTD** (Temps Moyen de Détection)
+  - **MTTR** (Temps Moyen de Réponse)
 
 ---
 
-## 4. Quantitative Objectives (End of Year)
+## 3. Objectifs Qualitatifs (Fin d'Année)
 
-- [ ] **6 complete and documented use-cases**
-- [ ] **1 multi-stage red-blue team exercise** simulating realistic attack scenarios
-
----
-
-## 5. Stretch Goals (Exceeding Expectations)
-
-- [ ] **8 published use-cases** with advanced TheHive/Cortex integration
-- [ ] **Significant reduction in false positives** through rule tuning
-- [ ] Automated response workflows
-- [ ] Threat intelligence feed integration
+- [ ] Règles de détection précises avec faibles taux de faux positifs
+- [ ] Playbooks d'investigation simples et actionnables
+- [ ] Tableau de bord de performance SOC (KPIs + runbooks)
+- [ ] Documentation claire couvrant :
+  - Procédures d'installation
+  - Workflows opérationnels
+  - Guides d'intégration des agents
+- [ ] Rapport de retour d'expérience structuré (REX) de l'exercice red-blue team
 
 ---
 
-## Project Structure
+## 4. Objectifs Quantitatifs (Fin d'Année)
+
+- [ ] **6 cas d'usage complets et documentés**
+- [ ] **1 exercice red-blue team multi-étapes** simulant des scénarios d'attaque réalistes
+
+---
+
+## 5. Objectifs Supplémentaires (Dépasser les Attentes)
+
+- [ ] **8 cas d'usage publiés** avec intégration avancée TheHive/Cortex
+- [ ] **Réduction significative des faux positifs** par ajustement des règles
+- [ ] Workflows de réponse automatisés
+- [ ] Intégration de flux de threat intelligence
+
+---
+
+## Structure du Projet
 
 ```
 mini-soc/
@@ -100,65 +100,65 @@ mini-soc/
 
 ---
 
-## Timeline & Milestones
+## Chronologie & Jalons
 
-### Phase 1: Foundation (Weeks 1-2)
-- SIEM installation and configuration
-- Agent deployment on test systems
-- Basic log collection validation
+### Phase 1 : Fondation (Semaines 1-2)
+- Installation et configuration SIEM
+- Déploiement d'agents sur systèmes de test
+- Validation de collecte de logs basique
 
-### Phase 2: Detection Development (Weeks 3-6)
-- Develop 6 core use-cases
-- Create detection rules
-- Initial testing and tuning
+### Phase 2 : Développement de Détection (Semaines 3-6)
+- Développer 6 cas d'usage principaux
+- Créer les règles de détection
+- Tests initiaux et ajustements
 
-### Phase 3: Playbook Creation (Weeks 7-8)
-- Investigation procedures
-- Response workflows
-- Escalation paths
+### Phase 3 : Création de Playbooks (Semaines 7-8)
+- Procédures d'investigation
+- Workflows de réponse
+- Chemins d'escalade
 
-### Phase 4: Dashboard & Metrics (Week 9)
-- KPI tracking implementation
-- Performance monitoring
-- Alert statistics
+### Phase 4 : Dashboards & Métriques (Semaine 9)
+- Implémentation du suivi KPI
+- Surveillance des performances
+- Statistiques d'alertes
 
-### Phase 5: Red-Blue Exercise (Weeks 10-11)
-- Scenario design
-- Attack simulation
-- Detection validation
+### Phase 5 : Exercice Red-Blue (Semaines 10-11)
+- Conception de scénarios
+- Simulation d'attaques
+- Validation de détection
 
-### Phase 6: Documentation & REX (Week 12)
-- Final documentation
-- Lessons learned
-- Future improvements
-
----
-
-## Success Criteria
-
-### Technical
-- All 6 use-cases detect threats with >90% accuracy
-- False positive rate <5% after tuning
-- MTTD <15 minutes for critical alerts
-- MTTR <60 minutes for high-severity incidents
-
-### Educational
-- Complete understanding of SOC operations
-- Hands-on experience with industry-standard tools
-- Professional documentation portfolio
-- Readiness for Security+ certification
+### Phase 6 : Documentation & REX (Semaine 12)
+- Documentation finale
+- Leçons apprises
+- Améliorations futures
 
 ---
 
-## Next Steps
+## Critères de Succès
 
-1. Choose SIEM platform (Wazuh vs Elastic Security)
-2. Set up lab environment
-3. Deploy first agent (recommended: Sysmon on Windows)
-4. Create first use-case (recommended: Brute-force detection)
+### Technique
+- Tous les 6 cas d'usage détectent les menaces avec >90% de précision
+- Taux de faux positifs <5% après ajustement
+- MTTD <15 minutes pour les alertes critiques
+- MTTR <60 minutes pour les incidents de haute sévérité
+
+### Éducatif
+- Compréhension complète des opérations SOC
+- Expérience pratique avec des outils standards de l'industrie
+- Portfolio de documentation professionnelle
+- Préparation à la certification Security+
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: November 27, 2025  
-**Author**: SOC Training Project
+## Prochaines Étapes
+
+1. Choisir la plateforme SIEM (Wazuh vs Elastic Security)
+2. Configurer l'environnement de laboratoire
+3. Déployer le premier agent (recommandé : Sysmon sur Windows)
+4. Créer le premier cas d'usage (recommandé : Détection de force brute)
+
+---
+
+**Version du Document** : 1.0  
+**Dernière Mise à Jour** : 27 novembre 2025  
+**Auteur** : Projet de Formation SOC

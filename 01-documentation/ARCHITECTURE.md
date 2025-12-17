@@ -1,21 +1,21 @@
-# Mini-SOC Architecture
+# Architecture Mini-SOC
 
-## System Architecture Overview
+## Vue d'Ensemble de l'Architecture Système
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         SOC Analyst                              │
-│                  (Dashboard & Investigation)                     │
+│                      Analyste SOC                            │
+│                (Dashboard & Investigation)                   │
 └────────────────────────┬─────────────────────────────────────────┘
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                      SIEM Platform                               │
-│            (Wazuh Manager / Elastic Stack)                       │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
-│  │  Correlation │  │   Detection  │  │   Alerting   │          │
-│  │    Engine    │  │     Rules    │  │    System    │          │
-│  └──────────────┘  └──────────────┘  └──────────────┘          │
+│                    Plateforme SIEM                           │
+│            (Wazuh Manager / Elastic Stack)                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │  Moteur de   │  │   Règles de │  │   Système   │      │
+│  │  Corrélation│  │   Détection │  │   d'Alerte   │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
 └────────────────────────┬─────────────────────────────────────────┘
                          │
          ┌───────────────┼───────────────┬──────────────┐
@@ -33,51 +33,51 @@
 
 ---
 
-## Component Details
+## Détails des Composants
 
-### 1. SIEM Platform (Central Analysis)
+### 1. Plateforme SIEM (Analyse Centrale)
 
-#### Option A: Wazuh (Recommended for Beginners)
-**Advantages:**
-- All-in-one security platform
-- Built-in agent management
-- Pre-configured rules for common attacks
-- Free and open-source
-- Good documentation
+#### Option A: Wazuh (Recommandé pour Débutants)
+**Avantages:**
+- Plateforme de sécurité tout-en-un
+- Gestion d'agents intégrée
+- Règles pré-configurées pour attaques courantes
+- Gratuit et open-source
+- Bonne documentation
 
-**Components:**
-- Wazuh Manager (rule engine, API)
-- Wazuh Indexer (Opensearch for log storage)
-- Wazuh Dashboard (Kibana-based UI)
+**Composants:**
+- Wazuh Manager (moteur de règles, API)
+- Wazuh Indexer (Opensearch pour stockage logs)
+- Wazuh Dashboard (UI basée sur Kibana)
 
-**System Requirements:**
-- CPU: 4 cores minimum
-- RAM: 8GB minimum (16GB recommended)
-- Storage: 100GB+ for log retention
-- OS: Ubuntu 20.04/22.04 or RHEL 8/9
+**Configuration Système Requise:**
+- CPU: 4 cœurs minimum
+- RAM: 8GB minimum (16GB recommandé)
+- Stockage: 100GB+ pour rétention des logs
+- OS: Ubuntu 20.04/22.04 ou RHEL 8/9
 
 #### Option B: Elastic Security
-**Advantages:**
-- Industry-standard platform
-- Powerful query language (KQL)
-- Advanced ML capabilities
-- Flexible customization
+**Avantages:**
+- Plateforme standard de l'industrie
+- Langage de requête puissant (KQL)
+- Capacités ML avancées
+- Personnalisation flexible
 
-**Components:**
-- Elasticsearch (data storage)
-- Logstash (log processing)
-- Kibana (visualization)
-- Elastic Agent or Beats
+**Composants:**
+- Elasticsearch (stockage de données)
+- Logstash (traitement des logs)
+- Kibana (visualisation)
+- Elastic Agent ou Beats
 
-**System Requirements:**
-- CPU: 4 cores minimum
+**Configuration Système Requise:**
+- CPU: 4 cœurs minimum
 - RAM: 16GB minimum
-- Storage: 200GB+ for log retention
-- OS: Ubuntu 20.04/22.04 or RHEL 8/9
+- Stockage: 200GB+ pour rétention des logs
+- OS: Ubuntu 20.04/22.04 ou RHEL 8/9
 
 ---
 
-### 2. Collection Agents
+### 2. Agents de Collecte
 
 #### Windows Endpoints
 
@@ -149,24 +149,24 @@
 
 ---
 
-### 3. Detection Layer
+### 3. Couche de Détection
 
-#### Rule Categories
+#### Catégories de Règles
 
-1. **Signature-Based Detection**
-   - Known attack patterns
-   - IOC (Indicators of Compromise) matching
-   - MITRE ATT&CK mapping
+1. **Détection Basée sur Signatures**
+   - Patterns d'attaques connus
+   - Correspondance IOC (Indicateurs de Compromission)
+   - Mapping MITRE ATT&CK
 
-2. **Anomaly-Based Detection**
-   - Baseline behavioral analysis
-   - Statistical outliers
-   - Machine learning (if using Elastic ML)
+2. **Détection Basée sur Anomalies**
+   - Analyse comportementale de base
+   - Valeurs aberrantes statistiques
+   - Machine learning (si utilisation Elastic ML)
 
-3. **Correlation Rules**
-   - Multi-event pattern matching
-   - Time-based sequences
-   - Cross-system correlation
+3. **Règles de Corrélation**
+   - Correspondance de patterns multi-événements
+   - Séquences temporelles
+   - Corrélation inter-systèmes
 
 #### Detection Use-Cases
 

@@ -1,27 +1,31 @@
-# Installation Guide - Mini-SOC
+# Guide d'Installation - Mini-SOC
 
-## Prerequisites
+> **Note**: Ce projet utilise maintenant Docker pour un déploiement simplifié. 
+> Consultez `docker-deployment/README.md` pour les instructions de déploiement Docker.
+> Ce guide reste disponible pour les installations manuelles traditionnelles.
 
-### Lab Environment Options
+## Prérequis
 
-#### Option 1: Virtual Machines (Recommended)
-- **Hypervisor**: VMware Workstation, VirtualBox, or Hyper-V
-- **Minimum Resources**:
-  - SIEM Server: 4 vCPU, 8GB RAM, 100GB disk
-  - Windows Test Machine: 2 vCPU, 4GB RAM, 60GB disk
-  - Linux Test Machine: 2 vCPU, 2GB RAM, 40GB disk
+### Options d'Environnement de Laboratoire
 
-#### Option 2: Cloud Environment
-- **Providers**: AWS, Azure, Google Cloud
-- **Instance Types**:
+#### Option 1: Machines Virtuelles (Recommandé)
+- **Hyperviseur**: VMware Workstation, VirtualBox, ou Hyper-V
+- **Ressources Minimales**:
+  - Serveur SIEM: 4 vCPU, 8GB RAM, 100GB disque
+  - Machine de Test Windows: 2 vCPU, 4GB RAM, 60GB disque
+  - Machine de Test Linux: 2 vCPU, 2GB RAM, 40GB disque
+
+#### Option 2: Environnement Cloud
+- **Fournisseurs**: AWS, Azure, Google Cloud
+- **Types d'Instance**:
   - SIEM: t3.xlarge (4 vCPU, 16GB RAM)
   - Endpoints: t3.medium (2 vCPU, 4GB RAM)
-- **Note**: Cloud costs can add up - monitor usage
+- **Note**: Les coûts cloud peuvent s'accumuler - surveillez l'utilisation
 
-#### Option 3: Physical Lab
-- Repurposed old hardware
-- Raspberry Pi for lightweight components
-- Mixed physical/virtual environment
+#### Option 3: Laboratoire Physique
+- Matériel ancien réutilisé
+- Raspberry Pi pour composants légers
+- Environnement physique/virtuel mixte
 
 ---
 

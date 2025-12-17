@@ -1,81 +1,81 @@
-# USE CASE 01: Brute-Force Attack Detection
+# CAS D'USAGE 01 : Détection d'Attaque par Force Brute
 
-## Executive Summary
+## Résumé Exécutif
 
-**Use Case ID**: UC-001  
-**Use Case Name**: Brute-Force Authentication Attack Detection  
-**MITRE ATT&CK**: T1110 (Brute Force), T1110.001 (Password Guessing)  
-**Severity**: High  
-**CVSS Score**: 7.5
+**ID du Cas d'Usage** : UC-001  
+**Nom du Cas d'Usage** : Détection d'Attaque d'Authentification par Force Brute  
+**MITRE ATT&CK** : T1110 (Force Brute), T1110.001 (Devinette de Mot de Passe)  
+**Sévérité** : Élevée  
+**Score CVSS** : 7.5
 
 ### Description
-Detects multiple failed authentication attempts followed by potential successful login, indicating brute-force or password spraying attacks against user accounts.
+Détecte plusieurs tentatives d'authentification échouées suivies d'une connexion potentiellement réussie, indiquant des attaques par force brute ou pulvérisation de mots de passe contre les comptes utilisateurs.
 
 ---
 
-## Attack Overview
+## Vue d'Ensemble de l'Attaque
 
-### What is Brute-Force?
-A brute-force attack attempts to gain unauthorized access by systematically trying many passwords or passphrases with the hope of eventually guessing correctly.
+### Qu'est-ce qu'une Attaque par Force Brute ?
+Une attaque par force brute tente d'obtenir un accès non autorisé en essayant systématiquement de nombreux mots de passe ou phrases de passe dans l'espoir de finalement deviner correctement.
 
-### Attack Variants
-1. **Traditional Brute-Force**: Rapid attempts against single account
-2. **Password Spraying**: Common passwords against many accounts
-3. **Credential Stuffing**: Known username/password pairs from breaches
-4. **Reverse Brute-Force**: Single password against many usernames
+### Variantes d'Attaque
+1. **Force Brute Traditionnelle** : Tentatives rapides contre un seul compte
+2. **Pulvérisation de Mots de Passe** : Mots de passe communs contre plusieurs comptes
+3. **Credential Stuffing** : Paires nom d'utilisateur/mot de passe connues issues de fuites
+4. **Force Brute Inverse** : Un seul mot de passe contre plusieurs noms d'utilisateur
 
-### Common Targets
-- SSH (Linux servers)
-- RDP (Windows desktops/servers)
-- Web application login pages
-- VPN gateways
-- Email servers (IMAP, POP3, SMTP)
+### Cibles Courantes
+- SSH (serveurs Linux)
+- RDP (bureaux/serveurs Windows)
+- Pages de connexion d'applications web
+- Passerelles VPN
+- Serveurs email (IMAP, POP3, SMTP)
 
 ---
 
-## Detection Logic
+## Logique de Détection
 
-### Detection Criteria
+### Critères de Détection
 
 #### Windows (Event ID 4625)
 ```
-IF failed_login_count >= 5 
-  WITHIN 2 minutes
-  FROM same_source_ip
-THEN ALERT: Potential Brute-Force Attack
+SI nombre_échecs_connexion >= 5 
+  DANS 2 minutes
+  DEPUIS même_ip_source
+ALORS ALERTE : Attaque Potentielle par Force Brute
 ```
 
 #### Linux (SSH)
 ```
-IF "Failed password" count >= 5
-  WITHIN 2 minutes
-  FROM same_source_ip
-THEN ALERT: SSH Brute-Force Attack
+SI nombre "Failed password" >= 5
+  DANS 2 minutes
+  DEPUIS même_ip_source
+ALORS ALERTE : Attaque SSH par Force Brute
 ```
 
-### Critical Follow-Up Detection
+### Détection de Suivi Critique
 ```
-IF successful_login (Event ID 4624 or "Accepted password")
-  WITHIN 5 minutes
-  AFTER brute_force_alert
-  FROM same_source_ip
-THEN ALERT: SUCCESSFUL BREACH AFTER BRUTE-FORCE (Critical Priority)
+SI connexion_réussie (Event ID 4624 ou "Accepted password")
+  DANS 5 minutes
+  APRÈS alerte_force_brute
+  DEPUIS même_ip_source
+ALORS ALERTE : VIOLATION RÉUSSIE APRÈS FORCE BRUTE (Priorité Critique)
 ```
 
 ---
 
-## Data Sources
+## Sources de Données
 
 ### Windows
-| Data Source | Event ID | Description |
+| Source de Données | ID Événement | Description |
 |-------------|----------|-------------|
-| Security Event Log | 4625 | Failed logon attempt |
-| Security Event Log | 4624 | Successful logon |
-| Security Event Log | 4648 | Logon using explicit credentials |
-| Security Event Log | 4771 | Kerberos pre-authentication failed |
+| Journal Sécurité | 4625 | Tentative de connexion échouée |
+| Journal Sécurité | 4624 | Connexion réussie |
+| Journal Sécurité | 4648 | Connexion avec identifiants explicites |
+| Journal Sécurité | 4771 | Échec pré-authentification Kerberos |
 
 ### Linux
-| Data Source | Log Location | Pattern |
+| Source de Données | Emplacement Log | Pattern |
 |-------------|--------------|---------|
 | Auth Log | /var/log/auth.log | "Failed password" |
 | Auth Log | /var/log/auth.log | "Accepted password" |

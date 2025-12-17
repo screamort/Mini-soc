@@ -1,41 +1,41 @@
-# Incident Response Playbook - Brute-Force Attack
+# Playbook de Réponse aux Incidents - Attaque par Force Brute
 
-## Response Objectives
+## Objectifs de Réponse
 
-1. Prevent successful breach
-2. Minimize disruption  
-3. Preserve evidence
-4. Prevent recurrence
+1. Prévenir toute violation réussie
+2. Minimiser les perturbations  
+3. Préserver les preuves
+4. Prévenir la récurrence
 
-## Activation Criteria
+## Critères d'Activation
 
-- Alert: 5+ failed login attempts within 2 minutes
-- Alert: Successful login after failed attempts
-- SOC analyst confirms brute-force pattern
+- Alerte: 5+ tentatives de connexion échouées en 2 minutes
+- Alerte: Connexion réussie après tentatives échouées
+- L'analyste SOC confirme un pattern de force brute
 
-## Response Phases
+## Phases de Réponse
 
-### Phase 1: Detection (0-5 minutes)
+### Phase 1: Détection (0-5 minutes)
 
-Quick Assessment and triage of the alert.
+Évaluation rapide et triage de l'alerte.
 
-### Phase 2: Containment (5-15 minutes)
+### Phase 2: Confinement (5-15 minutes)
 
-Block source IP and protect accounts.
+Bloquer l'IP source et protéger les comptes.
 
 ### Phase 3: Investigation (15-30 minutes)
 
-Analyze attack and determine scope.
+Analyser l'attaque et déterminer la portée.
 
-### Phase 4: Recovery (30-60 minutes)
+### Phase 4: Récupération (30-60 minutes)
 
-Reset credentials and harden systems.
+Réinitialiser les identifiants et renforcer les systèmes.
 
-### Phase 5: Post-Incident (1-24 hours)
+### Phase 5: Post-Incident (1-24 heures)
 
-Document and improve defenses.
+Documenter et améliorer les défenses.
 
 ---
 
-**Playbook Version**: 1.0  
-**Last Updated**: November 27, 2025
+**Version du Playbook** : 1.0  
+**Dernière Mise à Jour** : 27 novembre 2025

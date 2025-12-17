@@ -63,139 +63,139 @@ SINON : Passer à l'Étape 1.2
 
 ---
 
-#### Step 1.2: Initial Context Gathering
-**Objective**: Gather basic information about the alert
+#### Étape 1.2 : Rassemblement Initial de Contexte
+**Objectif** : Rassembler les informations de base sur l'alerte
 
-**Actions**:
+**Actions** :
 ```
-1. Identify source IP/hostname
-2. Identify destination IP/hostname (if applicable)
-3. Identify user account involved
-4. Note time range of suspicious activity
-5. Check if similar alerts exist
+1. Identifier l'IP/nom d'hôte source
+2. Identifier l'IP/nom d'hôte destination (si applicable)
+3. Identifier le compte utilisateur impliqué
+4. Noter la plage horaire de l'activité suspecte
+5. Vérifier si des alertes similaires existent
 ```
 
-**SIEM Queries**:
+**Requêtes SIEM** :
 
 *Wazuh*:
 ```
-# Search for related events
-agent.name:"<hostname>" AND rule.id:"<rule_id>"
+# Rechercher des événements liés
+agent.name:"<nom_hôte>" AND rule.id:"<id_règle>"
 
-# Check user activity
-user.name:"<username>" AND @timestamp:[now-1h TO now]
+# Vérifier l'activité utilisateur
+user.name:"<nom_utilisateur>" AND @timestamp:[now-1h TO now]
 ```
 
 *Elastic*:
 ```kql
-/* Related events from same host */
-host.name:"<hostname>" AND event.category:security
+/* Événements liés du même hôte */
+host.name:"<nom_hôte>" AND event.category:security
 
-/* User activity timeline */
-user.name:"<username>" AND @timestamp >= now-1h
+/* Chronologie de l'activité utilisateur */
+user.name:"<nom_utilisateur>" AND @timestamp >= now-1h
 ```
 
-**Decision Point**:
+**Point de Décision** :
 ```
-IF sufficient context gathered
-  THEN: Proceed to Phase 2
-ELSE: Escalate for senior analyst review
+SI contexte suffisant rassemblé
+  ALORS : Passer à la Phase 2
+SINON : Escaler pour examen par analyste senior
 ```
 
 ---
 
-### Phase 2: Detailed Investigation (Time: 10-15 minutes)
+### Phase 2 : Investigation Détaillée (Temps : 10-15 minutes)
 
-#### Step 2.1: Timeline Analysis
-**Objective**: Build a timeline of events
+#### Étape 2.1 : Analyse de Chronologie
+**Objectif** : Construire une chronologie des événements
 
-**Actions**:
+**Actions** :
 ```
-1. Identify first occurrence of suspicious activity
-2. Identify last occurrence
-3. Map out sequence of events
-4. Look for patterns or anomalies
-```
-
-**Timeline Template**:
-```
-T-0:00 - Initial suspicious event detected
-T+0:05 - [Event description]
-T+0:10 - [Event description]
-T+0:15 - Alert triggered
+1. Identifier la première occurrence de l'activité suspecte
+2. Identifier la dernière occurrence
+3. Cartographier la séquence des événements
+4. Rechercher des motifs ou anomalies
 ```
 
-**Tools**:
-- SIEM timeline view
-- Excel/spreadsheet for manual correlation
-- Visualization tools (if available)
+**Modèle de Chronologie** :
+```
+T-0:00 - Premier événement suspect détecté
+T+0:05 - [Description de l'événement]
+T+0:10 - [Description de l'événement]
+T+0:15 - Alerte déclenchée
+```
+
+**Outils** :
+- Vue chronologique SIEM
+- Excel/tableur pour corrélation manuelle
+- Outils de visualisation (si disponibles)
 
 ---
 
-#### Step 2.2: Scope Assessment
-**Objective**: Determine if incident is isolated or widespread
+#### Étape 2.2 : Évaluation de la Portée
+**Objectif** : Déterminer si l'incident est isolé ou étendu
 
-**Actions**:
+**Actions** :
 ```
-1. Check if other systems affected
-2. Identify if multiple users involved
-3. Assess geographic spread (if applicable)
-4. Determine if attack is ongoing
+1. Vérifier si d'autres systèmes sont affectés
+2. Identifier si plusieurs utilisateurs sont impliqués
+3. Évaluer l'étendue géographique (si applicable)
+4. Déterminer si l'attaque est en cours
 ```
 
-**Queries**:
+**Requêtes** :
 ```
-# Check for similar activity across all systems
-<search_all_hosts> <suspicious_pattern>
+# Vérifier une activité similaire sur tous les systèmes
+<rechercher_tous_les_hôtes> <motif_suspect>
 
-# Check if pattern is widespread
+# Vérifier si le motif est étendu
 stats count by host.name, user.name
 ```
 
-**Scope Classification**:
-- **Isolated**: Single host/user affected
-- **Limited**: 2-5 hosts/users affected
-- **Widespread**: >5 hosts/users affected
+**Classification de la Portée** :
+- **Isolé** : Un seul hôte/utilisateur affecté
+- **Limité** : 2-5 hôtes/utilisateurs affectés
+- **Étendu** : >5 hôtes/utilisateurs affectés
 
 ---
 
-#### Step 2.3: Impact Analysis
-**Objective**: Assess potential damage or risk
+#### Étape 2.3 : Analyse d'Impact
+**Objectif** : Évaluer les dommages potentiels ou les risques
 
-**Key Questions**:
-- ✅ What data/systems were accessed?
-- ✅ Was sensitive information exposed?
-- ✅ Were administrative privileges used?
-- ✅ Is there evidence of data exfiltration?
-- ✅ Were systems modified?
+**Questions Clés** :
+- ✅ Quelles données/systèmes ont été accédés ?
+- ✅ Des informations sensibles ont-elles été exposées ?
+- ✅ Des privilèges administratifs ont-ils été utilisés ?
+- ✅ Y a-t-il des preuves d'exfiltration de données ?
+- ✅ Les systèmes ont-ils été modifiés ?
 
-**Impact Levels**:
-- **Critical**: Confirmed breach, data loss, or system compromise
-- **High**: Potential breach or unauthorized access
-- **Medium**: Suspicious activity, no confirmed compromise
-- **Low**: Anomalous but likely benign activity
+**Niveaux d'Impact** :
+- **Critique** : Violation confirmée, perte de données, ou compromission système
+- **Élevé** : Violation potentielle ou accès non autorisé
+- **Moyen** : Activité suspecte, aucune compromission confirmée
+- **Faible** : Anomalie mais activité probablement bénigne
 
-**Decision Point**:
+**Point de Décision** :
 ```
-IF impact is Critical or High
-  THEN: Escalate to Incident Response team immediately
-ELSE: Continue investigation
+SI l'impact est Critique ou Élevé
+  ALORS : Escaler immédiatement vers l'équipe de Réponse aux Incidents
+SINON : Continuer l'investigation
 ```
 
 ---
 
-### Phase 3: Root Cause Analysis (Time: 15-20 minutes)
+### Phase 3 : Analyse de Cause Racine (Temps : 15-20 minutes)
 
-#### Step 3.1: Identify Attack Vector
-**Objective**: Determine how the attack occurred
+#### Étape 3.1 : Identifier le Vecteur d'Attaque
+**Objectif** : Déterminer comment l'attaque s'est produite
 
-**Common Attack Vectors**:
-- Phishing email
-- Brute-force authentication
-- Exploited vulnerability
-- Malicious insider
-- Supply chain compromise
-- Misconfiguration
+**Vecteurs d'Attaque Courants** :
+- Email de phishing
+- Authentification par force brute
+- Vulnérabilité exploitée
+- Intrus malveillant
+- Compromission de la chaîne d'approvisionnement
+- Mauvaise configuration
 
 **Investigation Actions**:
 ```

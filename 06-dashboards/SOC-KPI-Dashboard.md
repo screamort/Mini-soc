@@ -67,133 +67,133 @@ MTTR = (Heure de Confinement - Heure de Détection)
 
 ---
 
-### 4. Alert Volume
+### 4. Volume des Alertes
 
-**Metrics**:
-- Total alerts per day
-- Alerts by severity
-- Alerts by use case
-- Alerts by data source
+**Métriques** :
+- Nombre total d'alertes par jour
+- Alertes par sévérité
+- Alertes par cas d'usage
+- Alertes par source de données
 
-**Targets**:
-- Keep total volume manageable (< 100/day for small SOC)
-- 70% Low/Medium, 20% High, 10% Critical
+**Objectifs** :
+- Garder le volume total gérable (< 100/jour pour petit SOC)
+- 70% Faible/Moyen, 20% Élevé, 10% Critique
 
-**Dashboard Visualization**: 
-- Daily volume trend line
-- Pie chart by severity
-- Bar chart by use case
+**Visualisation Tableau de Bord** : 
+- Courbe de tendance quotidienne
+- Camembert par sévérité
+- Graphique à barres par cas d'usage
 
 ---
 
-### 5. False Positive Rate
+### 5. Taux de Faux Positifs
 
-**Definition**: Percentage of alerts that are false positives.
+**Définition** : Pourcentage d'alertes qui sont des faux positifs.
 
-**Formula**:
+**Formule** :
 ```
-False Positive Rate = (False Positives / Total Alerts) × 100
-```
-
-**Target**: < 10%
-
-**Measurement**:
-- Track analyst classification of each alert
-- Calculate percentage monthly
-
-**Dashboard Visualization**: Line chart showing FP rate trend
-
----
-
-### 6. Detection Coverage
-
-**Metrics**:
-- Number of active detection rules
-- Number of monitored endpoints
-- Number of log sources
-- Coverage by MITRE ATT&CK technique
-
-**Target**: 
-- 100% of endpoints monitored
-- >50% coverage of MITRE ATT&CK techniques
-
-**Dashboard Visualization**: 
-- Endpoint coverage percentage
-- MITRE ATT&CK heatmap
-
----
-
-### 7. Incident Severity Distribution
-
-**Metrics**:
-- Count by severity level
-- Trend over time
-
-**Healthy Distribution**:
-- Critical: 5-10%
-- High: 10-20%
-- Medium: 30-40%
-- Low: 40-50%
-
-**Dashboard Visualization**: Stacked area chart
-
----
-
-## Operational Metrics
-
-### 8. Alert Handling Efficiency
-
-**Metrics**:
-- Alerts closed per analyst per day
-- Average handling time per alert
-- Escalation rate
-
-**Targets**:
-- Handling time: < 30 minutes average
-- Escalation rate: < 20%
-
----
-
-### 9. Detection Rule Performance
-
-**Metrics per rule**:
-- Total alerts generated
-- True positive count
-- False positive count
-- Accuracy rate
-
-**Formula**:
-```
-Rule Accuracy = (True Positives / Total Alerts) × 100
+Taux de Faux Positifs = (Faux Positifs / Alertes Totales) × 100
 ```
 
-**Target**: > 90% accuracy per rule
+**Objectif** : < 10%
+
+**Mesure** :
+- Suivre la classification de chaque alerte par l'analyste
+- Calculer le pourcentage mensuellement
+
+**Visualisation Tableau de Bord** : Graphique linéaire montrant la tendance du taux de faux positifs
 
 ---
 
-### 10. Threat Intelligence Integration
+### 6. Couverture de Détection
 
-**Metrics**:
-- IOC matches per day
-- Threat intel sources active
-- Time from IOC publication to detection
+**Métriques** :
+- Nombre de règles de détection actives
+- Nombre de points de terminaison surveillés
+- Nombre de sources de logs
+- Couverture par technique MITRE ATT&CK
 
-**Target**: Detect known IOCs within 24 hours of publication
+**Objectif** : 
+- 100% des points de terminaison surveillés
+- >50% de couverture des techniques MITRE ATT&CK
+
+**Visualisation Tableau de Bord** : 
+- Pourcentage de couverture des points de terminaison
+- Carte thermique MITRE ATT&CK
 
 ---
 
-## Dashboard Implementation
+### 7. Distribution de la Sévérité des Incidents
 
-### Wazuh Dashboard Configuration
+**Métriques** :
+- Comptage par niveau de sévérité
+- Tendance dans le temps
 
-The Wazuh dashboard provides built-in visualizations. Custom dashboards can be created in Kibana.
+**Distribution Saine** :
+- Critique : 5-10%
+- Élevé : 10-20%
+- Moyen : 30-40%
+- Faible : 40-50%
 
-**Key Visualizations**:
-1. Security Events Overview
-2. Top Security Alerts
-3. Alert Evolution by Rule
-4. Agent Status
-5. MITRE ATT&CK Coverage
+**Visualisation Tableau de Bord** : Graphique en aires empilées
+
+---
+
+## Métriques Opérationnelles
+
+### 8. Efficacité de Traitement des Alertes
+
+**Métriques** :
+- Alertes fermées par analyste par jour
+- Temps moyen de traitement par alerte
+- Taux d'escalade
+
+**Objectifs** :
+- Temps de traitement : < 30 minutes en moyenne
+- Taux d'escalade : < 20%
+
+---
+
+### 9. Performance des Règles de Détection
+
+**Métriques par règle** :
+- Nombre total d'alertes générées
+- Nombre de vrais positifs
+- Nombre de faux positifs
+- Taux de précision
+
+**Formule** :
+```
+Précision de la Règle = (Vrais Positifs / Alertes Totales) × 100
+```
+
+**Objectif** : > 90% de précision par règle
+
+---
+
+### 10. Intégration d'Intelligence sur les Menaces
+
+**Métriques** :
+- Correspondances IOC par jour
+- Sources d'intelligence sur les menaces actives
+- Temps entre publication IOC et détection
+
+**Objectif** : Détecter les IOC connus dans les 24 heures suivant leur publication
+
+---
+
+## Implémentation du Tableau de Bord
+
+### Configuration du Tableau de Bord Wazuh
+
+Le tableau de bord Wazuh fournit des visualisations intégrées. Des tableaux de bord personnalisés peuvent être créés dans Kibana.
+
+**Visualisations Clés** :
+1. Vue d'Ensemble des Événements de Sécurité
+2. Alertes de Sécurité Principales
+3. Évolution des Alertes par Règle
+4. Statut des Agents
+5. Couverture MITRE ATT&CK
 
 ---
 

@@ -33,6 +33,7 @@ mini-soc/
 ├── docker-deployment/             Docker Compose configs
 │   ├── docker-compose-elastic.yml Elastic Stack services
 │   ├── logstash/                  Log processing pipeline
+│   ├── configure-firewall.ps1     Windows firewall setup
 │   ├── test-bruteforce.ps1        SSH brute-force simulation
 │   ├── test-admin-abuse.ps1       Privilege abuse simulation
 │   ├── test-web-attacks.ps1       Web attack simulation
@@ -42,9 +43,6 @@ mini-soc/
 │   ├── PROJECT_OVERVIEW.md        Project goals
 │   ├── ARCHITECTURE.md            System architecture
 │   └── INSTALLATION_GUIDE.md      Setup guide
-│
-├── 02-siem-configs/               Detection rules
-│   └── wazuh/custom-rules.xml     Custom detection rules
 │
 ├── 04-use-cases/                  Threat scenarios
 │   ├── 01-brute-force/            SSH brute-force
